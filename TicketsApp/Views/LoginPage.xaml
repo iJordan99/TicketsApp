@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TicketsApp.Views.LoginPage"
+             xmlns:viewModel="clr-namespace:TicketsApp.ViewModels"
+             x:DataType="viewModel:LoginPageViewModel">
+
+    <Grid Style="{StaticResource Grid}"
+          ColumnDefinitions="0.5*,0.4*"
+          RowDefinitions="40,20,40,20,40, 40,20"
+          Padding="20"
+          RowSpacing="10">
+
+        <Label Text="Login"
+               Style="{StaticResource AuthHeading}" />
+
+        <Label Grid.Row="1"
+               Grid.ColumnSpan="2"
+               Text="Email"
+               FontFamily="Consolas"
+               FontAttributes="Bold" />
+
+        <Entry Placeholder="Email"
+               Grid.ColumnSpan="2"
+               Grid.Row="2"
+               FontFamily="Consolas"
+               TextChanged="Email_Changed"/>
+
+        <Label Text="Password"
+               Grid.Row="3"
+               FontAttributes="Bold"
+               FontFamily="Consolas" />
+
+        <Entry Placeholder="Password"
+               Grid.ColumnSpan="2"
+               Grid.Row="4"
+               IsPassword="True"
+               FontFamily="Consolas"
+               TextChanged="Password_Changed"/>
+
+        <Button Grid.Row="5"
+                Text="Login"
+                Grid.ColumnSpan="2"
+                Style="{StaticResource Button}"
+                FontFamily="Consolas"
+                Command="{Binding LoginCommand}"/>
+
+        <Label Grid.Row="6"
+               Text="Don't have an account?"
+               FontFamily="Consolas"
+               FontAttributes="Bold"
+               VerticalOptions="Center" />
+
+
+        <Button Grid.Row="6"
+                Grid.Column="2"
+                Text="Register"
+                FontFamily="Consolas"
+                HorizontalOptions="End"
+                VerticalOptions="Center" />
+
+    </Grid>
+</ContentPage>
