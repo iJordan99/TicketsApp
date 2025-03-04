@@ -5,36 +5,27 @@ using TicketsApp.Models;
 
 namespace TicketsApp.ViewModels;
 
-public partial class LoginPageViewModel : BaseViewModel
+public partial class LoginPageViewModel(IAppState appState, IAuthService authService) : BaseViewModel(appState)
 {
-    private readonly IAuthService _authService;
-    
-    public LoginPageViewModel(IAppState appState,IAuthService authService) : base(appState)
-    {
-        _authService = authService;
-    }
-    
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
-    string _entryEmail;
+    [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
+    private string _entryEmail;
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
-    string _entryPassword;
-    
+    [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
+    private string _entryPassword;
+
     [RelayCommand(CanExecute = nameof(CanLogin))]
     private async Task Login()
     {
         try
         {
-            var authenticate = await _authService.LoginAsync<object>(new LoginRequest(EntryEmail, EntryPassword));
+            var authenticate = await authService.LoginAsync<object>(new LoginRequest(EntryEmail, EntryPassword));
             if (authenticate != null && authenticate.Errors.Any())
             {
                 var errorMessages = string.Join(Environment.NewLine, authenticate.Errors.Select(e => e.Message));
                 await Shell.Current.DisplayAlert("Login Failed", errorMessages, "OK");
                 return;
             }
-            
+
             await Shell.Current.GoToAsync("//HomePage");
         }
         catch (Exception ex)
@@ -43,9 +34,15 @@ public partial class LoginPageViewModel : BaseViewModel
                 .DisplayAlert("Error", $"Login failed: {ex.Message}", "OK");
         }
     }
-    
+
     private bool CanLogin()
     {
         return !string.IsNullOrEmpty(EntryEmail) && !string.IsNullOrEmpty(EntryPassword);
+    }
+
+    [RelayCommand]
+    private async Task NavigateToRegisterPage()
+    {
+        await Shell.Current.GoToAsync("/RegisterPage");
     }
 }

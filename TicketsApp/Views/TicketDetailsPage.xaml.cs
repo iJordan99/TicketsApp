@@ -1,12 +1,12 @@
 using TicketsApp.ViewModels;
+
 namespace TicketsApp.Views;
 
-public partial class HomePage : ContentPage
+public partial class TicketDetailsPage : ContentPage
 {
-    public HomePage(HomePageViewModel vm)
+    public TicketDetailsPage(TicketDetailsViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
     }
-    
 }

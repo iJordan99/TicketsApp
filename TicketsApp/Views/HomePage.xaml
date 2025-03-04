@@ -1,12 +1,134 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TicketsApp.Views.HomePage"
              xmlns:viewModel="clr-namespace:TicketsApp.ViewModels"
-             x:DataType="viewModel:HomePageViewModel">
+             xmlns:model="clr-namespace:TicketsApp.Models"
+             x:DataType="viewModel:HomePageViewModel"
+             BackgroundColor="#C0C8CA"
+             Shell.BackgroundColor="#C0C8CA">
 
-    <ScrollView>
-        <Label Text="{Binding WelcomeText}"/>
-    </ScrollView>
+    <ContentPage.Resources>
+        <ResourceDictionary />
+    </ContentPage.Resources>
+
+    <StackLayout Margin="30,0,0,0" Spacing="5">
+        <VerticalStackLayout Margin="0,0,40,0" HorizontalOptions="End">
+            <HorizontalStackLayout Spacing="5" Margin="0,10">
+                <Label Text="Assigned"
+                       TextTransform="Uppercase"
+                       FontFamily="LexendRegular"
+                       FontSize="21"
+                       Margin="0,5"
+                       TextColor="#2E44156"
+                       HorizontalTextAlignment="Start">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Engineer}" Value="False">
+                            <Setter Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Label Text="{Binding Tickets.Count, StringFormat='[ {0} ]'}"
+                       FontFamily="LexendRegular"
+                       FontSize="21"
+                       Margin="0,5"
+                       TextColor="#2E44156"
+                       HorizontalTextAlignment="Start" />
+
+                <Label Text="High Priority"
+                       FontSize="18"
+                       FontFamily="LexendBold"
+                       TextColor="White"
+                       BackgroundColor="Red"
+                       Padding="10"
+                       HorizontalOptions="Center" />
+
+                <Label Text="Medium Priority"
+                       FontSize="18"
+                       FontFamily="LexendBold"
+                       TextColor="White"
+                       BackgroundColor="DarkOrange"
+                       Padding="10"
+                       HorizontalOptions="Center" />
+
+                <Label Text="Low Priority"
+                       FontSize="18"
+                       FontFamily="LexendBold"
+                       TextColor="White"
+                       BackgroundColor="Green"
+                       Padding="10"
+                       HorizontalOptions="Center" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}" Margin="0,0,30,0">
+
+            <StackLayout Padding="5"
+                         HeightRequest="850"
+                         VerticalOptions="Start"
+                         Spacing="20">
+
+                <CollectionView ItemsSource="{Binding Tickets}"
+                                HeightRequest="850"
+                                VerticalOptions="Start">
+
+                    <CollectionView.ItemsLayout>
+
+                        <GridItemsLayout Orientation="Vertical"
+                                         Span="5"
+                                         HorizontalItemSpacing="20"
+                                         VerticalItemSpacing="20" />
+
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+
+                        <DataTemplate x:DataType="{x:Type model:Ticket}">
+                            <Border HorizontalOptions="FillAndExpand"
+                                    Stroke="lightgrey"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    Padding="10"
+                                    HeightRequest="220"
+                                    BackgroundColor="White">
+
+                                <Border.Shadow>
+                                    <Shadow Brush="#2E4156"
+                                            Offset="4,8"
+                                            Radius="5"
+                                            Opacity="0.3" />
+                                </Border.Shadow>
+
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:HomePageViewModel}},
+                                        Path= TicketDetailsCommand}"
+                                        CommandParameter="{Binding}" />
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout>
+
+                                    <Label Text="{Binding ., Converter={StaticResource TicketFormatConverter}}"
+                                           TextColor="{Binding Priority, Converter={StaticResource PriorityToColorConverter}}"
+                                           VerticalTextAlignment="Center"
+                                           FontSize="21"
+                                           FontFamily="LexendBold" />
+
+
+                                    <Label Text="{Binding Description}"
+                                           VerticalTextAlignment="Center"
+                                           Margin="0,10,0,0"
+                                           TextColor="#1A2D42"
+                                           FontSize="21"
+                                           FontFamily="LexendLight" />
+
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </RefreshView>
+    </StackLayout>
 </ContentPage>

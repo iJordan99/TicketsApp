@@ -1,39 +1,69 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="TicketsApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:TicketsApp.Views"
-    Shell.FlyoutBehavior="Flyout"
-    Title="TicketsApp">
+    FlyoutBehavior="Locked"
+    FlyoutBackgroundColor="#2E4156"
+    BackgroundColor="Transparent"
+    FlyoutWidth="180">
 
     <ShellContent
         ContentTemplate="{DataTemplate local:LoginPage}"
-        Route="Home"
-        Shell.FlyoutBehavior="Disabled"
-        Shell.FlyoutItemIsVisible="False"/>
-    
+        Route="Login"
+        FlyoutItemIsVisible="False" />
+
+
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
-            <Grid HeightRequest="50">
-                <Label Text="Amazing Workout App"
-                       FontSize="Large"
-                       TextColor="{StaticResource Primary}"
-                       FontFamily="SF-Pro-Bold"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
+            <Grid HeightRequest="100">
+                <Label Text="Ticketly"
+                       FontSize="30"
+                       Margin="0,40,0,0"
+                       TextColor="White"
+                       FontFamily="LexendBold"
+                       VerticalTextAlignment="Start"
+                       HorizontalOptions="Center" />
             </Grid>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
-    
-    <FlyoutItem Title="Home"
-                FlyoutDisplayOptions="AsSingleItem">
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="10" HorizontalOptions="Center" VerticalOptions="Center">
+                <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                    <Image Source="{Binding Icon}"
+                           WidthRequest="40"
+                           HeightRequest="40"
+                           Aspect="AspectFit" />
+
+                    <Label Text="{Binding Title}"
+                           FontSize="16"
+                           TextColor="White"
+                           FontFamily="LexendRegular"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="dash_icon.png" Title="Dashboard">
         <Tab>
-            <ShellContent
-                ContentTemplate="{DataTemplate local:HomePage}"
-                Route="HomePage" />
-    
+            <ShellContent ContentTemplate="{DataTemplate local:HomePage}" Route="HomePage" />
         </Tab>
     </FlyoutItem>
 
+    <MenuFlyoutSeparator />
+
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="dash_icon.png" Title="Test">
+        <Tab>
+            <!-- <ShellContent ContentTemplate="{DataTemplate local:HomePage}" Route="HomePage"/> -->
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="settings_icon.png">
+        <Tab>
+            <!-- <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Route="SettingsPage"/> -->
+        </Tab>
+    </FlyoutItem>
 </Shell>

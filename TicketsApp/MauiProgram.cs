@@ -1,5 +1,8 @@
 ﻿using System.Text.Json;
+using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Markup;
 using Microsoft.Extensions.Logging;
+using TicketsApp.Helpers;
 using TicketsApp.Interfaces;
 using TicketsApp.Services;
 using TicketsApp.ViewModels;
@@ -14,10 +17,21 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkitMarkup()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("Lexend-Black.ttf", "LexendBlack");
+                fonts.AddFont("Lexend-Bold.ttf", "LexendBold");
+                fonts.AddFont("Lexend-ExtraBold.ttf", "LexendExtraBold");
+                fonts.AddFont("Lexend-ExtraLight.ttf", "LexendExtraLight");
+                fonts.AddFont("Lexend-Light.ttf", "LexendLight");
+                fonts.AddFont("Lexend-Medium.ttf", "LexendMedium");
+                fonts.AddFont("Lexend-Regular.ttf", "LexendRegular");
+                fonts.AddFont("Lexend-SemiBold.ttf", "LexendSemiBold");
+                fonts.AddFont("Lexend-Thin.ttf", "LexendThin");
             })
             .RegisterViewsAndViewModels()
             .RegisterServices();
@@ -34,30 +48,37 @@ public static class MauiProgram
         //Pages
         mauiAppBuilder.Services.AddTransient<HomePage>();
         mauiAppBuilder.Services.AddTransient<LoginPage>();
+        mauiAppBuilder.Services.AddTransient<TicketDetailsPage>();
         //ViewModel
         mauiAppBuilder.Services.AddTransient<HomePageViewModel>();
         mauiAppBuilder.Services.AddTransient<LoginPageViewModel>();
+        mauiAppBuilder.Services.AddTransient<TicketDetailsViewModel>();
         return mauiAppBuilder;
     }
 
-    private static MauiAppBuilder RegisterServices(this MauiAppBuilder mauiAppBuilder)
+    private static void RegisterServices(this MauiAppBuilder mauiAppBuilder)
     {
         mauiAppBuilder.Services.AddSingleton<IAppState, AppState>();
-        
+
+        mauiAppBuilder.Services.AddScoped<IAuthService, AuthService>();
+
+
+        mauiAppBuilder.Services.AddScoped<IEngineerTicketService, EngineerTicketService>();
+        mauiAppBuilder.Services.AddScoped<ITicketService, TicketService>();
+
         mauiAppBuilder.Services.AddSingleton(new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = true
         });
-        
-        mauiAppBuilder.Services.AddSingleton<HttpClient>(sp =>
+
+        mauiAppBuilder.Services.AddSingleton<HttpClient>(_ =>
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             return client;
         });
-        
-        mauiAppBuilder.Services.AddSingleton<IAuthService, AuthService>();
-        return mauiAppBuilder;
+
+        mauiAppBuilder.Services.AddTransient<IRestApiDataParser, RestApiDataParser>();
     }
 }

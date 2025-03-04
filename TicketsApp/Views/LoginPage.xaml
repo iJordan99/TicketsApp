@@ -4,61 +4,141 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TicketsApp.Views.LoginPage"
              xmlns:viewModel="clr-namespace:TicketsApp.ViewModels"
-             x:DataType="viewModel:LoginPageViewModel">
-
-    <Grid Style="{StaticResource Grid}"
-          ColumnDefinitions="0.5*,0.4*"
-          RowDefinitions="40,20,40,20,40, 40,20"
-          Padding="20"
-          RowSpacing="10">
-
-        <Label Text="Login"
-               Style="{StaticResource AuthHeading}" />
-
-        <Label Grid.Row="1"
-               Grid.ColumnSpan="2"
-               Text="Email"
-               FontFamily="Consolas"
-               FontAttributes="Bold" />
-
-        <Entry Placeholder="Email"
-               Grid.ColumnSpan="2"
-               Grid.Row="2"
-               FontFamily="Consolas"
-               TextChanged="Email_Changed"/>
-
-        <Label Text="Password"
-               Grid.Row="3"
-               FontAttributes="Bold"
-               FontFamily="Consolas" />
-
-        <Entry Placeholder="Password"
-               Grid.ColumnSpan="2"
-               Grid.Row="4"
-               IsPassword="True"
-               FontFamily="Consolas"
-               TextChanged="Password_Changed"/>
-
-        <Button Grid.Row="5"
-                Text="Login"
-                Grid.ColumnSpan="2"
-                Style="{StaticResource Button}"
-                FontFamily="Consolas"
-                Command="{Binding LoginCommand}"/>
-
-        <Label Grid.Row="6"
-               Text="Don't have an account?"
-               FontFamily="Consolas"
-               FontAttributes="Bold"
-               VerticalOptions="Center" />
+             x:DataType="viewModel:LoginPageViewModel"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#C0C8CA">
 
 
-        <Button Grid.Row="6"
-                Grid.Column="2"
-                Text="Register"
-                FontFamily="Consolas"
-                HorizontalOptions="End"
-                VerticalOptions="Center" />
+    <Grid HorizontalOptions="Center" VerticalOptions="Center">
+        <Border
+            Padding="20"
+            StrokeShape="RoundRectangle 10"
+            BackgroundColor="#2E4156"
+            WidthRequest="900" HeightRequest="450"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
 
+            <Border.Shadow>
+                <Shadow Brush="#2E4156"
+                        Offset="5,5"
+                        Radius="5"
+                        Opacity="0.2" />
+            </Border.Shadow>
+
+            <StackLayout Spacing="30" Padding="10">
+                <Label Text="Ticketly"
+                       TextTransform="Uppercase"
+                       HorizontalOptions="Start"
+                       FontSize="32"
+                       TextColor="white"
+                       FontFamily="LexendExtraBold" />
+
+                <Label Text="Email"
+                       TextColor="White"
+                       FontFamily="LexendMedium"
+                       FontSize="22" />
+
+                <Entry Placeholder="Email"
+                       Margin="0,5,0,5"
+                       TextColor="white"
+                       FontFamily="LexendLight"
+                       FontSize="22"
+                       Text="{Binding EntryEmail}" />
+
+                <Label Text="Password"
+                       FontAttributes="Bold"
+                       TextColor="white"
+                       FontFamily="LexendMedium"
+                       FontSize="22" />
+
+                <Entry Placeholder="Password"
+                       IsPassword="True"
+                       Margin="0,5,0,5"
+                       TextColor="white"
+                       FontFamily="LexendLight"
+                       FontSize="22"
+                       Text="{Binding EntryPassword}" />
+
+                <Button Text="Login"
+                        Style="{StaticResource Button}"
+                        FontFamily="LexendSemiBold"
+                        Command="{Binding LoginCommand}" />
+            </StackLayout>
+        </Border>
     </Grid>
+
+    <!-- <ContentPage.BackgroundImageSource> -->
+    <!--     <FileImageSource File="page" /> -->
+    <!-- </ContentPage.BackgroundImageSource> -->
+
+    <!-- <Grid ColumnDefinitions="0.4*,0.4*,0.4*" -->
+    <!--       Padding="20" -->
+    <!--       RowSpacing="15"> -->
+    <!-- -->
+    <!--        <Grid.RowDefinitions> -->
+    <!--         <RowDefinition Height="400" /> -->
+    <!--         <RowDefinition Height="80"/> -->
+    <!--         <RowDefinition Height="20"/> -->
+    <!--         <RowDefinition Height="50"/> -->
+    <!--         <RowDefinition Height="20"/> -->
+    <!--         <RowDefinition Height="50"/> -->
+    <!--         <RowDefinition Height="50"/> -->
+    <!--         <RowDefinition Height="Auto" /> -->
+    <!--     </Grid.RowDefinitions> -->
+    <!-- -->
+    <!-- -->
+    <!--     <Label Text="Ticketly" -->
+    <!--            TextTransform="Uppercase" -->
+    <!--            Grid.Column="1" -->
+    <!--            Grid.Row="1" -->
+    <!--            HorizontalOptions="Start" -->
+    <!--            FontSize="32" -->
+    <!--            TextColor="White" -->
+    <!--            FontFamily="LexendExtraBold"/> -->
+    <!-- -->
+    <!--     <Label Text="Email" -->
+    <!--            Grid.Row="2" -->
+    <!--            Grid.Column="1" -->
+    <!--            TextColor="White" -->
+    <!--            FontFamily="LexendBlack" -->
+    <!--            FontSize="22"/> -->
+    <!-- -->
+    <!--     <Entry Placeholder="Email" -->
+    <!--            Grid.Row="3" -->
+    <!--            Grid.Column="1" -->
+    <!--            Margin="0,5,0,5" -->
+    <!--            TextColor="White" -->
+    <!--            FontFamily="LexendLight" -->
+    <!--            FontSize="22" -->
+    <!--            Text="{Binding EntryEmail}"/> -->
+    <!-- -->
+    <!--     <Label Text="Password" -->
+    <!--            Grid.Row="4" -->
+    <!--            Grid.Column="1" -->
+    <!--            FontAttributes="Bold" -->
+    <!--            TextColor="White" -->
+    <!--            FontFamily="LexendBlack" -->
+    <!--            FontSize="22"/> -->
+    <!-- -->
+    <!--     <Entry Placeholder="Password" -->
+    <!--            Grid.Row="5" -->
+    <!--            Grid.Column="1" -->
+    <!--            IsPassword="True" -->
+    <!--            Margin="0,5,0,5" -->
+    <!--            TextColor="White" -->
+    <!--            FontFamily="LexendLight" -->
+    <!--            FontSize="22" -->
+    <!--            Text="{Binding EntryPassword}"/> -->
+    <!-- -->
+    <!--     <Button Text="Login" -->
+    <!--             Grid.Row="6" -->
+    <!--             Grid.Column="1" -->
+    <!--             Style="{StaticResource Button}" -->
+    <!--             FontFamily="LexendSemiBold" -->
+    <!--             Command="{Binding LoginCommand}"/> -->
+    <!-- </Grid> -->
+
+
 </ContentPage>

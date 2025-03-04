@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Net.Http.Json;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
 
@@ -11,17 +11,14 @@ namespace TicketsApp.Services;
 public class AuthService(HttpClient httpClient, JsonSerializerOptions serializerOptions, IAppState appState)
     : IAuthService
 {
-    private const string loginUrl = "https://tickets.test/api/login";
+    private const string LoginUrl = "https://tickets.test/api/login";
 
     public async Task<ApiErrorResponse?> LoginAsync<T>(LoginRequest loginRequest)
     {
         try
         {
             var errorResponse = await _SetApiToken(loginRequest);
-            if (errorResponse != null)
-            {
-                return errorResponse;
-            }
+            if (errorResponse != null) return errorResponse;
             await _SetUserData();
             return null;
         }
@@ -36,39 +33,47 @@ public class AuthService(HttpClient httpClient, JsonSerializerOptions serializer
     {
         var jsonPayload = JsonSerializer.Serialize(loginRequest, serializerOptions);
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        
-        HttpResponseMessage response = await httpClient.PostAsync(loginUrl, content);
-        
+
+        var response = await httpClient.PostAsync(LoginUrl, content);
+
         switch (response.StatusCode)
         {
             case HttpStatusCode.Unauthorized:
                 return new ApiErrorResponse(new List<ApiError>
                 {
-                    new ApiError(
-                        type: "Unauthorized",
-                        status: 401,
-                        message: "Invalid credentials."
+                    new(
+                        "Unauthorized",
+                        401,
+                        "Invalid credentials."
                     )
                 });
             case HttpStatusCode.OK:
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
-                using JsonDocument doc = JsonDocument.Parse(responseContent);
+
+                using var doc = JsonDocument.Parse(responseContent);
+
                 var apiToken = doc.RootElement.GetProperty("data").GetProperty("token").GetString();
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
-                appState.ApiToken = apiToken;
+
+                if (!string.IsNullOrEmpty(apiToken))
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
+                    appState.ApiToken = apiToken;
+                }
+
                 break;
             }
 
             default:
                 return await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
         }
+
         return null;
     }
-    
+
     private async Task _SetUserData()
     {
-        HttpResponseMessage response = await httpClient.GetAsync("https://tickets.test/api/v1/user");
+        var response = await httpClient.GetAsync("https://tickets.test/api/v1/user");
 
         if (response.IsSuccessStatusCode)
         {
@@ -83,10 +88,8 @@ public class AuthService(HttpClient httpClient, JsonSerializerOptions serializer
                 Id = root.GetProperty("id").GetInt32(),
                 Name = attributes.GetProperty("name").GetString() ?? "",
                 Email = attributes.GetProperty("email").GetString() ?? "",
-                IsAdmin = attributes.GetProperty("is_admin").GetBoolean(),
                 IsEngineer = attributes.GetProperty("is_engineer").GetBoolean()
             };
         }
     }
-    
 }
