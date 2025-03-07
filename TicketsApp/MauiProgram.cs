@@ -2,8 +2,8 @@
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
 using Microsoft.Extensions.Logging;
-using TicketsApp.Helpers;
 using TicketsApp.Interfaces;
+using TicketsApp.Parsers;
 using TicketsApp.Services;
 using TicketsApp.ViewModels;
 using TicketsApp.Views;
@@ -64,7 +64,6 @@ public static class MauiProgram
 
 
         mauiAppBuilder.Services.AddScoped<IEngineerTicketService, EngineerTicketService>();
-        mauiAppBuilder.Services.AddScoped<ITicketService, TicketService>();
 
         mauiAppBuilder.Services.AddSingleton(new JsonSerializerOptions
         {
@@ -79,6 +78,7 @@ public static class MauiProgram
             return client;
         });
 
-        mauiAppBuilder.Services.AddTransient<IRestApiDataParser, RestApiDataParser>();
+        mauiAppBuilder.Services.AddSingleton(typeof(TicketParsingConfig));
+        mauiAppBuilder.Services.AddTransient<ITicketParser, TicketParser>();
     }
 }

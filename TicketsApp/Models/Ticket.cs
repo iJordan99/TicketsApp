@@ -2,8 +2,8 @@ namespace TicketsApp.Models;
 
 public class Ticket
 {
-    public Ticket(int id, string? errorCode, string? title, string? description, string? status,
-        string? priority, string? reproductionStep, DateTime createdOn, DateTime updatedOn, string? type)
+    public Ticket(int id, string? errorCode, string? title, string? description, string? type, string? status,
+        string? priority, string? reproductionStep, DateTime createdOn, DateTime updatedOn)
     {
         Id = id;
         ErrorCode = errorCode;
@@ -18,11 +18,11 @@ public class Ticket
     }
 
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public string Status { get; set; }
-    public string Type { get; set; }
-    public string Priority { get; set; }
+    public string? Title { get; set; }
+    public string? Description { get; set; }
+    public string? Status { get; set; }
+    public string? Type { get; set; }
+    public string? Priority { get; set; }
     public string? ReproductionStep { get; set; }
     public string? ErrorCode { get; set; }
     public DateTime CreatedOn { get; set; }
