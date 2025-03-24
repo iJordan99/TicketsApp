@@ -1,7 +1,29 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 namespace TicketsApp.Models;
 
-public class Ticket
+public partial class Ticket : ObservableObject
 {
+
+    [ObservableProperty] private DateTime _createdOn;
+
+    [ObservableProperty] private string? _description;
+
+    [ObservableProperty] private string? _errorCode;
+
+    [ObservableProperty] private int _id;
+
+    [ObservableProperty] private string? _priority;
+
+    [ObservableProperty] private string? _reproductionStep;
+
+    [ObservableProperty] private string? _status;
+
+    [ObservableProperty] private string? _title;
+
+    [ObservableProperty] private string? _type;
+
+    [ObservableProperty] private DateTime _updatedOn;
+
     public Ticket(int id, string? errorCode, string? title, string? description, string? type, string? status,
         string? priority, string? reproductionStep, DateTime createdOn, DateTime updatedOn)
     {
@@ -16,15 +38,4 @@ public class Ticket
         CreatedOn = createdOn;
         UpdatedOn = updatedOn;
     }
-
-    public int Id { get; set; }
-    public string? Title { get; set; }
-    public string? Description { get; set; }
-    public string? Status { get; set; }
-    public string? Type { get; set; }
-    public string? Priority { get; set; }
-    public string? ReproductionStep { get; set; }
-    public string? ErrorCode { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public DateTime UpdatedOn { get; set; }
 }

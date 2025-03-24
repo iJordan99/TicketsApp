@@ -9,218 +9,234 @@
     <ContentPage.Resources>
         <ResourceDictionary />
     </ContentPage.Resources>
-    
-    <VerticalStackLayout Padding="20"
-                         Spacing="10">
-        <Border HorizontalOptions="FillAndExpand"
-                Stroke="lightgrey"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10"
-                Padding="10"
-                BackgroundColor="White">
-            <Border.Shadow>
-                <Shadow Brush="#2E4156"
-                        Offset="4,8"
-                        Radius="5"
-                        Opacity="0.3" />
-            </Border.Shadow>
 
-            <VerticalStackLayout Spacing="15">
 
-                <Label Text="{Binding TicketData, Converter={StaticResource TicketFormatConverter}}"
-                       TextColor="{Binding TicketData.Priority, Converter={StaticResource PriorityToColorConverter}}"
-                       VerticalTextAlignment="Center"
-                       FontSize="20"
-                       FontFamily="LexendBold" />
+    <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                 Command="{Binding RefreshCommand}">
 
-                <Label Text="{Binding TicketData.Description}"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendLight" />
+        <ScrollView>
 
-                <Label Text="Reproduction Step"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendBold" />
+            <VerticalStackLayout Padding="20"
+                                 Spacing="10">
+                <Border HorizontalOptions="FillAndExpand"
+                        Stroke="lightgrey"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        Padding="10"
+                        BackgroundColor="White">
+                    <Border.Shadow>
+                        <Shadow Brush="#2E4156"
+                                Offset="4,8"
+                                Radius="5"
+                                Opacity="0.3" />
+                    </Border.Shadow>
 
-                <Label Text="{Binding TicketData.ReproductionStep}"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendLight" />
+                    <VerticalStackLayout Spacing="15">
 
-                <Label Text="Error Code"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendBold" />
-
-                <Label Text="{Binding TicketData.ErrorCode}"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendLight" />
-
-                <Label Text="Created"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendBold" />
-
-                <Label Text="{Binding TicketData.CreatedOn}"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendLight" />
-
-                <Label Text="Last Updated"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendBold" />
-
-                <Label Text="{Binding TicketData.UpdatedOn}"
-                       VerticalTextAlignment="Center"
-                       Margin="0,5,0,0"
-                       TextColor="#1A2D42"
-                       FontSize="20"
-                       FontFamily="LexendLight" />
-
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="Author"
-                           FontSize="20"
-                           FontFamily="LexendBold"
-                           TextColor="#1A2D42" />
-
-                    <HorizontalStackLayout Spacing="15">
-                        <Label Text="{Binding TicketData.Author.Name}"
+                        <Label Text="{Binding TicketData, Converter={StaticResource TicketFormatConverter}}"
+                               TextColor="{Binding TicketData.Priority, Converter={StaticResource PriorityToColorConverter}}"
+                               VerticalTextAlignment="Center"
                                FontSize="20"
-                               FontFamily="LexendLight"
-                               TextColor="#1A2D42" />
+                               FontFamily="LexendBold" />
 
-                        <Label Text="{Binding TicketData.Author.Email}"
+                        <Label Text="{Binding TicketData.Description}"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
                                FontSize="20"
-                               FontFamily="LexendLight"
-                               TextColor="#1A2D42" />
-                    </HorizontalStackLayout>
+                               FontFamily="LexendLight" />
 
-                    <Label Text="Engineers"
-                           FontSize="20"
-                           FontFamily="LexendBold"
-                           TextColor="#1A2D42" />
+                        <Label Text="Reproduction Step"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
+                               FontSize="20"
+                               FontFamily="LexendBold" />
 
-                    <VerticalStackLayout>
-                        <CollectionView ItemsSource="{Binding TicketData.Engineers}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="{x:Type model:User}">
-                                    <HorizontalStackLayout Spacing="20">
-                                        <Label Text="{Binding Name}"
-                                               VerticalTextAlignment="Center"
-                                               Margin="0,10,0,0"
-                                               TextColor="#1A2D42"
-                                               FontSize="20"
-                                               FontFamily="LexendLight" />
+                        <Label Text="{Binding TicketData.ReproductionStep}"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
+                               FontSize="20"
+                               FontFamily="LexendLight" />
 
-                                        <Label Text="{Binding Email}"
-                                               VerticalTextAlignment="Center"
-                                               Margin="0,10,0,0"
-                                               TextColor="#1A2D42"
-                                               FontSize="20"
-                                               FontFamily="LexendLight" />
-                                    </HorizontalStackLayout>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
+                        <Label Text="Error Code"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
+                               FontSize="20"
+                               FontFamily="LexendBold" />
 
-                        </CollectionView>
-                    </VerticalStackLayout>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
-        </Border>
+                        <Label Text="{Binding TicketData.ErrorCode}"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
+                               FontSize="20"
+                               FontFamily="LexendLight" />
 
-        <Label Text="Comments"
-               Margin="5,10,0,0"
-               TextColor="#1A2D42"
-               FontSize="20"
-               FontFamily="LexendLight" />
+                        <Label Text="Created"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
+                               FontSize="20"
+                               FontFamily="LexendBold" />
 
-        <Border HorizontalOptions="FillAndExpand"
-                Stroke="lightgrey"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 10"
-                Padding="10"
-                BackgroundColor="White">
-            <Border.Shadow>
-                <Shadow Brush="#2E4156"
-                        Offset="4,8"
-                        Radius="5"
-                        Opacity="0.3" />
-            </Border.Shadow>
+                        <Label Text="{Binding TicketData.CreatedOn}"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
+                               FontSize="20"
+                               FontFamily="LexendLight" />
 
+                        <Label Text="Last Updated"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
+                               FontSize="20"
+                               FontFamily="LexendBold" />
 
-            <VerticalStackLayout>
-                <CollectionView ItemsSource="{Binding TicketData.Comments}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="{x:Type model:Comment}">
-                            <Grid ColumnDefinitions="50, *" RowDefinitions="Auto, Auto" Padding="10">
-                                <!-- Profile Image -->
-                                <Image Grid.RowSpan="2"
-                                       Grid.Column="0"
-                                       Source="person.png"
-                                       HeightRequest="50"
-                                       WidthRequest="50"
-                                       Aspect="AspectFill"
-                                       VerticalOptions="Start"
-                                       Margin="5" />
+                        <Label Text="{Binding TicketData.UpdatedOn}"
+                               VerticalTextAlignment="Center"
+                               Margin="0,5,0,0"
+                               TextColor="#1A2D42"
+                               FontSize="20"
+                               FontFamily="LexendLight" />
 
-                                <!-- User Name -->
-                                <Label Grid.Column="1"
-                                       Text="{Binding User.Name}"
-                                       FontSize="20"
-                                       FontFamily="LexendBold"
-                                       TextColor="#1A2D42"
-                                       VerticalTextAlignment="Center"
-                                       Margin="5,0,0,0" />
+                        <VerticalStackLayout Spacing="15">
+                            <Label Text="Author"
+                                   FontSize="20"
+                                   FontFamily="LexendBold"
+                                   TextColor="#1A2D42" />
 
-                                <!-- Comment Text -->
-                                <Label Grid.Row="1"
-                                       Grid.Column="1"
-                                       Text="{Binding Text}"
+                            <HorizontalStackLayout Spacing="15">
+                                <Label Text="{Binding TicketData.Author.Name}"
                                        FontSize="20"
                                        FontFamily="LexendLight"
-                                       TextColor="#1A2D42"
-                                       VerticalTextAlignment="Start"
-                                       Margin="5,0,0,5" />
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-                <Grid ColumnDefinitions="*, Auto" Padding="10">
-                    <Entry Grid.Column="0"
-                           Placeholder="New Comment"
-                           TextColor="#1A2D42"
-                           FontSize="18"
-                           FontFamily="LexendLight"
-                           Margin="0,0,10,0" />
+                                       TextColor="#1A2D42" />
 
-                    <Button Grid.Column="1"
-                            Text=" + "
-                            FontFamily="LexendSemiBold"
-                            BackgroundColor="#1A2D42"
-                            TextColor="White"
-                            Padding="10,5"
-                            CornerRadius="10" />
-                </Grid>
+                                <Label Text="{Binding TicketData.Author.Email}"
+                                       FontSize="20"
+                                       FontFamily="LexendLight"
+                                       TextColor="#1A2D42" />
+                            </HorizontalStackLayout>
+
+                            <Label Text="Engineers"
+                                   FontSize="20"
+                                   FontFamily="LexendBold"
+                                   TextColor="#1A2D42" />
+
+                            <VerticalStackLayout>
+                                <CollectionView ItemsSource="{Binding TicketData.Engineers}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="{x:Type model:User}">
+                                            <HorizontalStackLayout Spacing="20">
+                                                <Label Text="{Binding Name}"
+                                                       VerticalTextAlignment="Center"
+                                                       Margin="0,10,0,0"
+                                                       TextColor="#1A2D42"
+                                                       FontSize="20"
+                                                       FontFamily="LexendLight" />
+
+                                                <Label Text="{Binding Email}"
+                                                       VerticalTextAlignment="Center"
+                                                       Margin="0,10,0,0"
+                                                       TextColor="#1A2D42"
+                                                       FontSize="20"
+                                                       FontFamily="LexendLight" />
+                                            </HorizontalStackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="Comments"
+                       Margin="5,10,0,0"
+                       TextColor="#1A2D42"
+                       FontSize="20"
+                       FontFamily="LexendLight" />
+
+                <Border HorizontalOptions="FillAndExpand"
+                        Stroke="lightgrey"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        Padding="10"
+                        BackgroundColor="White">
+                    <Border.Shadow>
+                        <Shadow Brush="#2E4156"
+                                Offset="4,8"
+                                Radius="5"
+                                Opacity="0.3" />
+                    </Border.Shadow>
+
+
+                    <VerticalStackLayout>
+                        <CollectionView ItemsSource="{Binding TicketData.Comments}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="{x:Type model:Comment}">
+                                    <Grid ColumnDefinitions="50, *" RowDefinitions="Auto, Auto" Padding="10">
+                                        <!-- Profile Image -->
+                                        <Image Grid.RowSpan="2"
+                                               Grid.Column="0"
+                                               Source="person.png"
+                                               HeightRequest="50"
+                                               WidthRequest="50"
+                                               Aspect="AspectFill"
+                                               VerticalOptions="Start"
+                                               Margin="5" />
+
+                                        <!-- User Info (Name + Date) -->
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="5"
+                                                             Margin="5,0,0,0">
+                                            <Label Text="{Binding User.Name}"
+                                                   FontSize="20"
+                                                   FontFamily="LexendBold"
+                                                   TextColor="{Binding User, Converter={StaticResource EngineerToColourConverter}}"
+                                                   VerticalTextAlignment="Center" />
+
+                                            <Label Text="{Binding Date, StringFormat='{0:MMM d, yyyy - h:mm tt}'}"
+                                                   FontSize="20"
+                                                   FontFamily="LexendLight"
+                                                   TextColor="#5D6D7E"
+                                                   VerticalTextAlignment="Center" />
+                                        </VerticalStackLayout>
+
+                                        <!-- Comment Text -->
+                                        <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="{Binding Text}"
+                                               FontSize="20"
+                                               FontFamily="LexendLight"
+                                               TextColor="#1A2D42"
+                                               VerticalTextAlignment="Start"
+                                               Margin="5,5,0,5" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Grid ColumnDefinitions="*, Auto" Padding="10">
+                            <Entry Grid.Column="0"
+                                   Placeholder="New Comment"
+                                   TextColor="#1A2D42"
+                                   FontSize="18"
+                                   FontFamily="LexendLight"
+                                   Margin="0,0,10,0" />
+
+                            <Button Grid.Column="1"
+                                    Text=" + "
+                                    FontFamily="LexendSemiBold"
+                                    BackgroundColor="#1A2D42"
+                                    TextColor="White"
+                                    Padding="10,5"
+                                    CornerRadius="10" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
             </VerticalStackLayout>
-        </Border>
-    </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
 </ContentPage>

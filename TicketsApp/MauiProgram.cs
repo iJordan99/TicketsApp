@@ -7,7 +7,6 @@ using TicketsApp.Parsers;
 using TicketsApp.Services;
 using TicketsApp.ViewModels;
 using TicketsApp.Views;
-
 namespace TicketsApp;
 
 public static class MauiProgram
@@ -60,10 +59,10 @@ public static class MauiProgram
     {
         mauiAppBuilder.Services.AddSingleton<IAppState, AppState>();
 
-        mauiAppBuilder.Services.AddScoped<IAuthService, AuthService>();
+        mauiAppBuilder.Services.AddSingleton<IAuthService, AuthService>();
 
 
-        mauiAppBuilder.Services.AddScoped<IEngineerTicketService, EngineerTicketService>();
+        mauiAppBuilder.Services.AddSingleton<IEngineerTicketService, EngineerTicketService>();
 
         mauiAppBuilder.Services.AddSingleton(new JsonSerializerOptions
         {
@@ -79,6 +78,16 @@ public static class MauiProgram
         });
 
         mauiAppBuilder.Services.AddSingleton(typeof(TicketParsingConfig));
-        mauiAppBuilder.Services.AddTransient<ITicketParser, TicketParser>();
+
+
+        mauiAppBuilder.Services.AddSingleton<IJsonParsingHelper, JsonParsingHelper>();
+
+        mauiAppBuilder.Services.AddSingleton<ITicketParser, TicketParser>();
+        mauiAppBuilder.Services.AddSingleton<ITicketService, TicketService>();
+
+        mauiAppBuilder.Services.AddSingleton<IJsonParsingHelper, JsonParsingHelper>();
+        mauiAppBuilder.Services.AddSingleton<IUserParser, UserParser>();
+        mauiAppBuilder.Services.AddSingleton<ICommentParser, CommentParser>(sp =>
+            new CommentParser(sp.GetRequiredService<IUserParser>(), sp.GetRequiredService<IJsonParsingHelper>()));
     }
 }

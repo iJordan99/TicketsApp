@@ -5,11 +5,9 @@ using System.Text;
 using System.Text.Json;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
-
 namespace TicketsApp.Services;
 
-public class AuthService(HttpClient httpClient, JsonSerializerOptions serializerOptions, IAppState appState)
-    : IAuthService
+public class AuthService(HttpClient httpClient, JsonSerializerOptions serializerOptions, IAppState appState) : IAuthService
 {
     private const string LoginUrl = "https://tickets.test/api/login";
 
@@ -18,7 +16,11 @@ public class AuthService(HttpClient httpClient, JsonSerializerOptions serializer
         try
         {
             var errorResponse = await _SetApiToken(loginRequest);
-            if (errorResponse != null) return errorResponse;
+            if (errorResponse != null)
+            {
+                return errorResponse;
+            }
+
             await _SetUserData();
             return null;
         }
