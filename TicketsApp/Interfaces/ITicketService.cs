@@ -4,5 +4,5 @@ namespace TicketsApp.Interfaces;
 public interface ITicketService
 {
     Task<TicketWithIncludes?> GetTicketWithIncludes(Ticket ticket);
-    Task AddComment(Comment newComment);
+    Task<PostApiResponse> AddComment(string comment, Ticket ticket);
 }

@@ -1,8 +1,17 @@
-using System.Collections.Generic;
-
 namespace TicketsApp.Models;
 
-public class ApiErrorResponse(List<ApiError> errors)
+public class ApiErrorResponse
 {
-    public List<ApiError> Errors { get; set; } = errors;
+
+    public ApiErrorResponse(List<ApiError> errors)
+    {
+        Errors = errors;
+    }
+
+    public ApiErrorResponse(ApiError error)
+    {
+        Errors = new List<ApiError> { error };
+    }
+
+    public List<ApiError> Errors { get; set; }
 }

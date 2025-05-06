@@ -2,7 +2,7 @@ using System.Text.Json;
 using TicketsApp.Models;
 namespace TicketsApp.Interfaces;
 
-public interface ICommentParser
+public interface IErrorParser
 {
-    Comment? Parse(JsonElement element);
+    ApiErrorResponse? Parse(JsonElement element);
 }

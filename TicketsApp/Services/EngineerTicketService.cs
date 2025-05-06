@@ -2,43 +2,72 @@ using System.Collections.ObjectModel;
 using System.Text.Json;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
+using TicketsApp.Parsers;
+using TicketsApp.Utilities;
+
 namespace TicketsApp.Services;
 
-public class EngineerTicketService(HttpClient httpClient, ITicketParser ticketParser) : IEngineerTicketService
+/// <summary>
+/// Provides services for fetching and managing engineer tickets.
+/// </summary>
+public class EngineerTicketService(HttpClient httpClient, ITicketParser ticketParser, GlobalParsingConfig globalParsingConfig)
+    : IEngineerTicketService
 {
+    /// <summary>
+    /// Retrieves all engineer tickets by iterating through multiple pages of results.
+    /// </summary>
+    /// <returns>
+    /// An observable collection of <see cref="Ticket"/> objects containing engineer tickets from all pages.
+    /// </returns>
     public async Task<ObservableCollection<Ticket>> GetEngineerTickets()
     {
         var tickets = new ObservableCollection<Ticket>();
-        var currentPage = 1;
-        var apiUrl = $"https://tickets.test/api/v1/engineer/tickets?page={currentPage}";
+        var page = 1;
+        int totalPages;
 
-        while (true)
+        do
         {
-            var response = await httpClient.GetAsync(apiUrl);
+            var (pageTickets, pages) = await FetchTicketsPageAsync(page);
+            totalPages = pages;
 
-            if (!response.IsSuccessStatusCode)
-                break;
-
-            var json = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(json);
-
-            var root = doc.RootElement.GetProperty("meta");
-            var totalPages = root.GetProperty("last_page").GetInt32();
-
-            foreach (var ticket in await ticketParser.ParseTickets(response))
+            foreach (var ticket in pageTickets)
             {
                 tickets.Add(ticket);
             }
 
-            if (currentPage >= totalPages)
-            {
-                break;
-            }
-
-            currentPage++;
-            apiUrl = $"https://tickets.test/api/v1/engineer/tickets?page={currentPage}";
-        }
+            page++;
+        } while (page <= totalPages);
 
         return tickets;
+    }
+
+    /// <summary>
+    /// Fetches a single page of tickets assigned to an engineer and determines the total number of pages available.
+    /// </summary>
+    /// <param name="page">The page number to fetch tickets for.</param>
+    /// <returns>
+    /// A tuple containing an observable collection of tickets for the specified page
+    /// and the total number of pages available.
+    /// </returns>
+    /// <exception cref="HttpRequestException">
+    /// Thrown when the HTTP request fails or the response is not successful.
+    /// </exception>
+    private async Task<(ObservableCollection<Ticket> Tickets, int TotalPages)> FetchTicketsPageAsync(int page)
+    {
+        var httpResponse = await httpClient.GetAsync(EngineerTicketApiRoutes.GetEngineerAssignedTickets(page));
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new HttpRequestException($"Failed to fetch tickets for page {page}.");
+
+        var json = await httpResponse.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(json);
+        var metaElement = doc.RootElement.GetProperty(globalParsingConfig.MetaProperty);
+
+
+        var totalPages = metaElement.GetProperty(globalParsingConfig.PaginationMappings["LastPage"]).GetInt32();
+
+        var tickets = await ticketParser.ParseTickets(httpResponse);
+
+        return (tickets, totalPages);
     }
 }

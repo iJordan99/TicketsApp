@@ -9,7 +9,7 @@ public partial class TicketDetailsViewModel(IAppState appState, ITicketService t
 {
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private bool _isRefreshing;
-    [ObservableProperty] private Comment _newComment;
+    [ObservableProperty] private string _newComment;
     [ObservableProperty] private Ticket? _ticket;
     [ObservableProperty] private TicketWithIncludes? _ticketData;
 
@@ -33,7 +33,22 @@ public partial class TicketDetailsViewModel(IAppState appState, ITicketService t
     [RelayCommand]
     private async Task AddComment()
     {
-        await ticketService.AddComment(NewComment);
+        if (Ticket == null)
+            return;
+
+        var result = await ticketService.AddComment(NewComment, Ticket);
+
+        if (result.Success)
+        {
+            NewComment = string.Empty;
+            await RefreshAsync();
+            await Shell.Current.DisplayAlert("Success", "Comment added.", "OK");
+        }
+        else
+        {
+            var errorMessage = result.Error?.Errors?.FirstOrDefault()?.Message;
+            await Shell.Current.DisplayAlert("Error", errorMessage, "OK");
+        }
     }
 
     [RelayCommand]

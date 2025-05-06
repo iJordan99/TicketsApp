@@ -224,6 +224,7 @@
                                    TextColor="#1A2D42"
                                    FontSize="18"
                                    FontFamily="LexendLight"
+                                   Text="{Binding NewComment}"
                                    Margin="0,0,10,0" />
 
                             <Button Grid.Column="1"
@@ -232,6 +233,7 @@
                                     BackgroundColor="#1A2D42"
                                     TextColor="White"
                                     Padding="10,5"
+                                    Command="{Binding AddCommentCommand}"
                                     CornerRadius="10" />
                         </Grid>
                     </VerticalStackLayout>

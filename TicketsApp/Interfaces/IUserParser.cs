@@ -5,5 +5,5 @@ namespace TicketsApp.Interfaces;
 public interface IUserParser
 {
 
-    User? ParseUser(JsonElement userElement);
+    User? Parse(JsonElement userElement);
 }

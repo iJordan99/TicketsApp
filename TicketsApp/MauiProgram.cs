@@ -67,6 +67,7 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddSingleton(new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true,
             WriteIndented = true
         });
 
@@ -78,12 +79,15 @@ public static class MauiProgram
         });
 
         mauiAppBuilder.Services.AddSingleton(typeof(TicketParsingConfig));
+        mauiAppBuilder.Services.AddSingleton(typeof(GlobalParsingConfig));
 
 
         mauiAppBuilder.Services.AddSingleton<IJsonParsingHelper, JsonParsingHelper>();
 
         mauiAppBuilder.Services.AddSingleton<ITicketParser, TicketParser>();
         mauiAppBuilder.Services.AddSingleton<ITicketService, TicketService>();
+        mauiAppBuilder.Services.AddSingleton<IErrorParser, ErrorParser>();
+        mauiAppBuilder.Services.AddSingleton<IPostApiResponseService, PostApiResponseService>();
 
         mauiAppBuilder.Services.AddSingleton<IJsonParsingHelper, JsonParsingHelper>();
         mauiAppBuilder.Services.AddSingleton<IUserParser, UserParser>();

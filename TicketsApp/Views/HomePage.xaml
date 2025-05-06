@@ -13,27 +13,27 @@
 
     <StackLayout Margin="30,0,0,0" Spacing="5">
         <VerticalStackLayout Margin="0,0,40,0" HorizontalOptions="End">
-            <HorizontalStackLayout Spacing="5" Margin="0,10">
-                <Label Text="Assigned"
-                       TextTransform="Uppercase"
-                       FontFamily="LexendRegular"
+            <HorizontalStackLayout Spacing="5" HorizontalOptions="End">
+                <Label Text="{Binding Username}"
+                       FontFamily="LexendBold"
                        FontSize="21"
-                       Margin="0,5"
                        TextColor="#2E44156"
-                       HorizontalTextAlignment="Start">
+                       VerticalTextAlignment="End">
                     <Label.Triggers>
                         <DataTrigger TargetType="Label" Binding="{Binding Engineer}" Value="False">
                             <Setter Property="IsVisible" Value="False" />
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
-
-                <Label Text="{Binding Tickets.Count, StringFormat='[ {0} ]'}"
+                <Label Text="{Binding Tickets.Count, StringFormat='[ {0} Tickets ]'}"
                        FontFamily="LexendRegular"
                        FontSize="21"
-                       Margin="0,5"
-                       TextColor="#2E44156"
+                       TextColor="#1A2D42"
                        HorizontalTextAlignment="Start" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="5" Margin="0,10">
+
 
                 <Label Text="High Priority"
                        FontSize="18"

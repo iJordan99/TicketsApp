@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
-
 namespace TicketsApp.ViewModels;
 
 public partial class LoginPageViewModel(IAppState appState, IAuthService authService) : BaseViewModel(appState)
@@ -18,7 +17,7 @@ public partial class LoginPageViewModel(IAppState appState, IAuthService authSer
     {
         try
         {
-            var authenticate = await authService.LoginAsync<object>(new LoginRequest(EntryEmail, EntryPassword));
+            var authenticate = await authService.LoginAsync(new LoginRequest(EntryEmail, EntryPassword));
             if (authenticate != null && authenticate.Errors.Any())
             {
                 var errorMessages = string.Join(Environment.NewLine, authenticate.Errors.Select(e => e.Message));
