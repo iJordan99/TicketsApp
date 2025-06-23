@@ -4,9 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:TicketsApp.Views"
     FlyoutBehavior="Locked"
-    FlyoutBackgroundColor="#2E4156"
+    FlyoutBackgroundColor="#224C7A"
     BackgroundColor="Transparent"
-    FlyoutWidth="180">
+    FlyoutWidth="180"
+    ForegroundColor="{StaticResource Primary}">
 
     <ShellContent
         ContentTemplate="{DataTemplate local:LoginPage}"

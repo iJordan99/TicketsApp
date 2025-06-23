@@ -19,17 +19,8 @@
             <VerticalStackLayout Padding="20"
                                  Spacing="10">
                 <Border HorizontalOptions="FillAndExpand"
-                        Stroke="lightgrey"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
                         Padding="10"
                         BackgroundColor="White">
-                    <Border.Shadow>
-                        <Shadow Brush="#2E4156"
-                                Offset="4,8"
-                                Radius="5"
-                                Opacity="0.3" />
-                    </Border.Shadow>
 
                     <VerticalStackLayout Spacing="15">
 
@@ -49,7 +40,7 @@
                         <Label Text="Reproduction Step"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
-                               TextColor="#1A2D42"
+                               TextColor="{StaticResource Primary}"
                                FontSize="20"
                                FontFamily="LexendBold" />
 
@@ -63,7 +54,7 @@
                         <Label Text="Error Code"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
-                               TextColor="#1A2D42"
+                               TextColor="{StaticResource Primary}"
                                FontSize="20"
                                FontFamily="LexendBold" />
 
@@ -77,7 +68,7 @@
                         <Label Text="Created"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
-                               TextColor="#1A2D42"
+                               TextColor="{StaticResource Primary}"
                                FontSize="20"
                                FontFamily="LexendBold" />
 
@@ -89,9 +80,8 @@
                                FontFamily="LexendLight" />
 
                         <Label Text="Last Updated"
-                               VerticalTextAlignment="Center"
+                               TextColor="{StaticResource Primary}"
                                Margin="0,5,0,0"
-                               TextColor="#1A2D42"
                                FontSize="20"
                                FontFamily="LexendBold" />
 
@@ -106,7 +96,7 @@
                             <Label Text="Author"
                                    FontSize="20"
                                    FontFamily="LexendBold"
-                                   TextColor="#1A2D42" />
+                                   TextColor="{StaticResource Primary}" />
 
                             <HorizontalStackLayout Spacing="15">
                                 <Label Text="{Binding TicketData.Author.Name}"
@@ -123,7 +113,7 @@
                             <Label Text="Engineers"
                                    FontSize="20"
                                    FontFamily="LexendBold"
-                                   TextColor="#1A2D42" />
+                                   TextColor="{StaticResource Primary}" />
 
                             <VerticalStackLayout>
                                 <CollectionView ItemsSource="{Binding TicketData.Engineers}">
@@ -155,22 +145,13 @@
 
                 <Label Text="Comments"
                        Margin="5,10,0,0"
-                       TextColor="#1A2D42"
+                       TextColor="{StaticResource Primary}"
                        FontSize="20"
                        FontFamily="LexendLight" />
 
                 <Border HorizontalOptions="FillAndExpand"
-                        Stroke="lightgrey"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
                         Padding="10"
                         BackgroundColor="White">
-                    <Border.Shadow>
-                        <Shadow Brush="#2E4156"
-                                Offset="4,8"
-                                Radius="5"
-                                Opacity="0.3" />
-                    </Border.Shadow>
 
 
                     <VerticalStackLayout>
@@ -201,7 +182,7 @@
                                             <Label Text="{Binding Date, StringFormat='{0:MMM d, yyyy - h:mm tt}'}"
                                                    FontSize="20"
                                                    FontFamily="LexendLight"
-                                                   TextColor="#5D6D7E"
+                                                   TextColor="{StaticResource PrimaryLight}"
                                                    VerticalTextAlignment="Center" />
                                         </VerticalStackLayout>
 
@@ -218,14 +199,19 @@
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                        <Grid ColumnDefinitions="*, Auto" Padding="10">
-                            <Entry Grid.Column="0"
-                                   Placeholder="New Comment"
-                                   TextColor="#1A2D42"
-                                   FontSize="18"
-                                   FontFamily="LexendLight"
-                                   Text="{Binding NewComment}"
-                                   Margin="0,0,10,0" />
+                        
+                        <Grid ColumnDefinitions="*, Auto" Padding="10" ColumnSpacing="10">
+                            <Entry
+                                Placeholder="New Comment"
+                                PlaceholderColor="{StaticResource Primary}"
+                                TextColor="#1A2D42"
+                                FontSize="18"
+                                FontFamily="LexendLight"
+                                HeightRequest="55"
+                                Text="{Binding NewComment}"
+                                Margin="0,0,10,0"
+                                BackgroundColor="Transparent" />
+                            <!-- </Border> -->
 
                             <Button Grid.Column="1"
                                     Text=" + "

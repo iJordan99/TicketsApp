@@ -8,14 +8,14 @@
              Shell.FlyoutBehavior="Disabled"
              Shell.TabBarIsVisible="False"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="#C0C8CA">
+             BackgroundColor="#CFD9E4">
 
 
     <Grid HorizontalOptions="Center" VerticalOptions="Center">
         <Border
             Padding="20"
             StrokeShape="RoundRectangle 10"
-            BackgroundColor="#2E4156"
+            BackgroundColor="#224C7A"
             WidthRequest="900" HeightRequest="450"
             HorizontalOptions="Center"
             VerticalOptions="Center">
@@ -43,6 +43,7 @@
                 <Entry Placeholder="Email"
                        Margin="0,5,0,5"
                        TextColor="white"
+                       BackgroundColor="Transparent"
                        FontFamily="LexendLight"
                        FontSize="22"
                        Text="{Binding EntryEmail}" />
@@ -57,6 +58,7 @@
                        IsPassword="True"
                        Margin="0,5,0,5"
                        TextColor="white"
+                       BackgroundColor="Transparent"
                        FontFamily="LexendLight"
                        FontSize="22"
                        Text="{Binding EntryPassword}" />

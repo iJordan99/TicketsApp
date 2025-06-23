@@ -5,47 +5,42 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Updated Color Scheme -->
-    <Color x:Key="Primary">#1A2D42</Color> <!-- Deep Blue -->
-    <Color x:Key="PrimaryDark">#4d597c</Color> <!-- Dark Blue -->
-    <Color x:Key="PrimaryDarkText">#FFFFFF</Color> <!-- White for contrast -->
-    <Color x:Key="Secondary">#48CAE4</Color> <!-- Light Aqua -->
-    <Color x:Key="SecondaryDarkText">#0077B6</Color> <!-- Deep Blue -->
-    <Color x:Key="Tertiary">#f5c98f</Color> <!-- Soft Cyan -->
+    <!-- Primary Colors -->
+    <Color x:Key="Primary">#224C7A</Color> <!-- Deep Blue - Your original color -->
+    <Color x:Key="PrimaryDark">#193758</Color> <!-- Darker Blue -->
+    <Color x:Key="PrimaryLight">#4B7297</Color> <!-- Lighter Blue -->
 
+    <!-- Secondary Colors -->
+    <Color x:Key="Secondary">#F0B775</Color> <!-- Warm Orange - Complementary -->
+    <Color x:Key="SecondaryDark">#D69654</Color> <!-- Darker Orange -->
+    <Color x:Key="SecondaryLight">#FFD4A5</Color> <!-- Light Orange -->
+
+    <!-- Accent Colors -->
+    <Color x:Key="Accent1">#4CAF8F</Color> <!-- Teal Green -->
+    <Color x:Key="Accent2">#E85D75</Color> <!-- Coral Pink -->
+    <Color x:Key="Accent3">#8C67B5</Color> <!-- Purple -->
+
+    <!-- Neutral Colors -->
     <Color x:Key="White">#FFFFFF</Color>
     <Color x:Key="Black">#000000</Color>
-    <Color x:Key="Accent">#F4A261</Color> <!-- Warm Orange -->
-    <Color x:Key="MidnightBlue">#03045E</Color> <!-- Dark Navy -->
-    <Color x:Key="OffBlack">#1B1B1B</Color> <!-- Very Dark Grey -->
+    <Color x:Key="Gray50">#F8F9FA</Color>
+    <Color x:Key="Gray100">#EBEEF2</Color>
+    <Color x:Key="Gray200">#D5DCE4</Color>
+    <Color x:Key="Gray300">#B7C1CD</Color>
+    <Color x:Key="Gray400">#99A5B5</Color>
+    <Color x:Key="Gray500">#7B8A9E</Color>
+    <Color x:Key="Gray600">#5D6E85</Color>
+    <Color x:Key="Gray700">#45536A</Color>
+    <Color x:Key="Gray800">#2E3950</Color>
+    <Color x:Key="Gray900">#1A2436</Color>
 
-    <Color x:Key="Magenta">#D600AA</Color> <!-- Add this back -->
-    <SolidColorBrush x:Key="MagentaBrush" Color="{StaticResource Magenta}" />
+    <!-- Status Colors -->
+    <Color x:Key="Success">#4CAF8F</Color> <!-- Same as Accent1 -->
+    <Color x:Key="Warning">#F0B775</Color> <!-- Same as Secondary -->
+    <Color x:Key="Error">#E85D75</Color> <!-- Same as Accent2 -->
+    <Color x:Key="Info">#4B7297</Color> <!-- Same as PrimaryLight -->
 
-    <Color x:Key="Gray100">#F8F9FA</Color>
-    <Color x:Key="Gray200">#E9ECEF</Color>
-    <Color x:Key="Gray300">#DEE2E6</Color>
-    <Color x:Key="Gray400">#CED4DA</Color>
-    <Color x:Key="Gray500">#ADB5BD</Color>
-    <Color x:Key="Gray600">#6C757D</Color>
-    <Color x:Key="Gray900">#343A40</Color>
-    <Color x:Key="Gray950">#212529</Color>
-
-    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
-    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}" />
-    <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}" />
-    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
-    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
-    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}" />
-    <Color x:Key="Blue300Accent">#A7CBF6</Color>
-
-    <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}" />
-    <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}" />
-    <SolidColorBrush x:Key="Gray300Brush" Color="{StaticResource Gray300}" />
-    <SolidColorBrush x:Key="Gray400Brush" Color="{StaticResource Gray400}" />
-    <SolidColorBrush x:Key="Gray500Brush" Color="{StaticResource Gray500}" />
-    <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}" />
-    <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}" />
-    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}" />
-
+    <!-- Background Colors -->
+    <Color x:Key="BackgroundLight">#F8F9FA</Color> <!-- Same as Gray50 -->
+    <Color x:Key="BackgroundDark">#1A2436</Color> <!-- Same as Gray900 -->
 </ResourceDictionary>
