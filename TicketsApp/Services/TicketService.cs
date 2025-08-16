@@ -3,43 +3,41 @@ using System.Text.Json;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
 using TicketsApp.Utilities;
+
 namespace TicketsApp.Services;
 
 /// <summary>
-/// Provides functionality to manage tickets, including retrieving ticket details
-/// with associated data and adding comments to a ticket.
+///     Provides functionality to manage tickets, including retrieving ticket details
+///     with associated data and adding comments to a ticket.
 /// </summary>
-public class TicketService(HttpClient httpClient, ITicketParser ticketParser, JsonSerializerOptions serializerOptions, IPostApiResponseService postApiResponseService) : ITicketService
+public class TicketService(
+    HttpClient httpClient,
+    JsonSerializerOptions serializerOptions,
+    IQueryStringBuilder queryStringBuilder) : ITicketService
 {
     /// <summary>
-    /// Retrieves a detailed ticket with additional related information, such as comments, author, and engineers, based on the specified ticket.
+    ///     Retrieves a detailed ticket with additional related information, such as comments, author, and engineers, based on
+    ///     the specified ticket.
     /// </summary>
     /// <param name="ticket">The ticket for which detailed information is required.</param>
     /// <returns>
-    /// A <see cref="TicketWithIncludes"/> object containing the ticket details with included related data,
-    /// or <c>null</c> if the operation is unsuccessful or the response status is not successful.
+    ///     A <see cref="TicketWithIncludes" /> object containing the ticket details with included related data,
+    ///     or <c>null</c> if the operation is unsuccessful or the response status is not successful.
     /// </returns>
-    public async Task<TicketWithIncludes?> GetTicketWithIncludes(Ticket ticket)
+    public async Task<HttpResponseMessage> GetTicketWithIncludes(Ticket ticket)
     {
-        var response =
-            await httpClient.GetAsync(
+        return await httpClient.GetAsync(
                 TicketApiRoutes.GetTicketWithIncludesUri(ticket.Id, "comment,author,engineer"));
-
-        if (response.IsSuccessStatusCode)
-        {
-            return await ticketParser.ParseTicketWithIncludes(response);
-        }
-
-        return null;
+        
     }
 
     /// <summary>
-    /// Adds a comment to the specified ticket.
+    ///     Adds a comment to the specified ticket.
     /// </summary>
     /// <param name="comment">The comment to be added to the ticket.</param>
     /// <param name="ticket">The ticket to which the comment will be added.</param>
-    /// <returns>A <see cref="PostApiResponse"/> containing the success status and any error details if the operation fails.</returns>
-    public async Task<PostApiResponse> AddComment(string comment, Ticket ticket)
+    /// <returns>A <see cref="PostApiResponse" /> containing the success status and any error details if the operation fails.</returns>
+    public async Task<HttpResponseMessage> AddComment(string comment, Ticket ticket)
     {
         var payload = new
         {
@@ -55,8 +53,15 @@ public class TicketService(HttpClient httpClient, ITicketParser ticketParser, Js
         var jsonPayload = JsonSerializer.Serialize(payload, serializerOptions);
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-        var response = await httpClient.PostAsync(TicketApiRoutes.AddComment(ticket.Id), content);
+        return await httpClient.PostAsync(TicketApiRoutes.AddComment(ticket.Id), content);
+    }
 
-        return await postApiResponseService.ProcessResponse(response);
+    public async Task<HttpResponseMessage> GetTickets(TicketQueryParameters? parameters)
+    {
+        var baseUri = "https://tickets.test/api/v1/tickets";
+        var queryString = queryStringBuilder.BuildQueryString(parameters);
+        var uri = string.IsNullOrEmpty(queryString) ? baseUri : $"{baseUri}?{queryString}";
+
+        return await httpClient.GetAsync(uri);
     }
 }

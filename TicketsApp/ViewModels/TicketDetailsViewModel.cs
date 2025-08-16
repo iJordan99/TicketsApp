@@ -2,9 +2,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
+
 namespace TicketsApp.ViewModels;
 
-public partial class TicketDetailsViewModel(IAppState appState, ITicketService ticketService)
+public partial class TicketDetailsViewModel(
+    IAppState appState,
+    ITicketParser ticketParser,
+    IErrorParser errorParser,
+    ITicketService ticketService,
+    IEngineerTicketService engineerTicketService)
     : BaseViewModel(appState), IQueryAttributable
 {
     [ObservableProperty] private bool _isLoading;
@@ -27,7 +33,8 @@ public partial class TicketDetailsViewModel(IAppState appState, ITicketService t
     [RelayCommand]
     private async Task GetTicketData()
     {
-        if (Ticket != null) TicketData = await ticketService.GetTicketWithIncludes(Ticket);
+        if (Ticket != null)
+            TicketData = await ticketParser.ParseTicketWithIncludes(await ticketService.GetTicketWithIncludes(Ticket));
     }
 
     [RelayCommand]
@@ -38,17 +45,14 @@ public partial class TicketDetailsViewModel(IAppState appState, ITicketService t
 
         var result = await ticketService.AddComment(NewComment, Ticket);
 
-        if (result.Success)
+        if (!result.IsSuccessStatusCode)
         {
-            NewComment = string.Empty;
-            await RefreshAsync();
-            await Shell.Current.DisplayAlert("Success", "Comment added.", "OK");
+            var errors = await errorParser.Parse(result);
         }
-        else
-        {
-            var errorMessage = result.Error?.Errors?.FirstOrDefault()?.Message;
-            await Shell.Current.DisplayAlert("Error", errorMessage, "OK");
-        }
+
+        NewComment = string.Empty;
+        await RefreshAsync();
+        await Shell.Current.DisplayAlert("Success", "Comment added.", "OK");
     }
 
     [RelayCommand]
@@ -59,5 +63,14 @@ public partial class TicketDetailsViewModel(IAppState appState, ITicketService t
         await GetTicketData();
 
         IsRefreshing = false;
+    }
+
+    [RelayCommand]
+    private async Task AssignEngineer()
+    {
+        if (Ticket != null)
+        {
+            var assigned = await engineerTicketService.AssignEngineer(Ticket, 11);
+        }
     }
 }
