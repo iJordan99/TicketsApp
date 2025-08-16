@@ -1,18 +1,20 @@
 using System.Text.Json;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
+
 namespace TicketsApp.Parsers;
 
 /// <summary>
-/// Parses JSON error responses and extracts relevant error information into an <see cref="ApiErrorResponse"/> object.
+///     Parses JSON error responses and extracts relevant error information into an <see cref="ApiErrorResponse" /> object.
 /// </summary>
 public class ErrorParser : IErrorParser
 {
-    /// Parses a JsonElement to extract error information and build an ApiErrorResponse object.
-    /// <param name="element">The JsonElement to be parsed, typically representing an error response.</param>
-    /// <returns>An ApiErrorResponse object containing the parsed error details, or null if parsing fails or the structure is not as expected.
-    public ApiErrorResponse? Parse(JsonElement element)
+    public async Task<ApiErrorResponse?> Parse(HttpResponseMessage response)
     {
+        var json = await response.Content.ReadAsStringAsync();
+        using var jsonDoc = JsonDocument.Parse(json);
+        var element = jsonDoc.RootElement;
+
         if (element.TryGetProperty("errors", out var errorsElement) && errorsElement.ValueKind == JsonValueKind.Array)
         {
             var errors = new List<ApiError>();

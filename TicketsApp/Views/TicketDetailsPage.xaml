@@ -115,6 +115,12 @@
                                    FontFamily="LexendBold"
                                    TextColor="{StaticResource Primary}" />
 
+                            <Button
+                                Text="Assign"
+                                BackgroundColor="#1A2D42"
+                                TextColor="White"
+                                Command="{Binding AssignEngineerCommand}" />
+
                             <VerticalStackLayout>
                                 <CollectionView ItemsSource="{Binding TicketData.Engineers}">
                                     <CollectionView.ItemTemplate>
@@ -199,7 +205,7 @@
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                        
+
                         <Grid ColumnDefinitions="*, Auto" Padding="10" ColumnSpacing="10">
                             <Entry
                                 Placeholder="New Comment"

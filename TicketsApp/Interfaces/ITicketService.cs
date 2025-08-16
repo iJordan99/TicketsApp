@@ -1,8 +1,11 @@
 using TicketsApp.Models;
+
 namespace TicketsApp.Interfaces;
 
 public interface ITicketService
 {
-    Task<TicketWithIncludes?> GetTicketWithIncludes(Ticket ticket);
-    Task<PostApiResponse> AddComment(string comment, Ticket ticket);
+    Task<HttpResponseMessage> GetTicketWithIncludes(Ticket ticket);
+    Task<HttpResponseMessage> AddComment(string comment, Ticket ticket);
+
+    Task<HttpResponseMessage> GetTickets(TicketQueryParameters? parameters);
 }

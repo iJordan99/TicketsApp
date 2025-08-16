@@ -2,16 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TicketsApp.Views.HomePage"
              xmlns:viewModel="clr-namespace:TicketsApp.ViewModels"
-             xmlns:model="clr-namespace:TicketsApp.Models"
              x:DataType="viewModel:HomePageViewModel"
              BackgroundColor="#CFD9E4"
-             Shell.BackgroundColor="#CFD9E4">
+             Shell.BackgroundColor="#CFD9E4"
+             xmlns:model="clr-namespace:TicketsApp.Models">
     <ContentPage.Resources>
         <ResourceDictionary />
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,*" Margin="30,0,30,0"
-          RowSpacing="20">
+
+    <Grid
+        RowDefinitions="Auto,Auto,580,Auto,500"
+        Margin="30,0,30,0"
+        RowSpacing="20">
 
         <Grid Grid.Row="0" Margin="0,0,0,0">
             <Grid.ColumnDefinitions>
@@ -27,7 +30,7 @@
                    VerticalTextAlignment="Center"
                    HorizontalOptions="Start">
                 <Label.Triggers>
-                    <DataTrigger TargetType="Label" Binding="{Binding Engineer}" Value="False">
+                    <DataTrigger TargetType="Label" Binding="{Binding IsEngineer}" Value="False">
                         <Setter Property="IsVisible" Value="False" />
                     </DataTrigger>
                 </Label.Triggers>
@@ -62,12 +65,20 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <RefreshView Grid.Row="1"
+        <Label Grid.Row="1"
+               Text="Assigned Tickets"
+               FontFamily="LexendLight"
+               FontSize="21"
+               TextColor="{StaticResource PrimaryLight}"
+               VerticalTextAlignment="Center"
+               HorizontalOptions="Start" />
+
+        <RefreshView Grid.Row="2"
                      IsRefreshing="{Binding IsRefreshing}"
                      Command="{Binding RefreshCommand}">
             <ScrollView VerticalScrollBarVisibility="Never">
                 <VerticalStackLayout Spacing="10">
-                    <CollectionView ItemsSource="{Binding Tickets}">
+                    <CollectionView ItemsSource="{Binding AssignedTickets}">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout Orientation="Vertical"
                                              Span="5"
@@ -84,7 +95,7 @@
                                     <Border.GestureRecognizers>
                                         <TapGestureRecognizer
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:HomePageViewModel}},
-                                            Path= TicketDetailsCommand}"
+                                                Path= TicketDetailsCommand}"
                                             CommandParameter="{Binding}" />
                                     </Border.GestureRecognizers>
 
@@ -115,14 +126,14 @@
 
                     <HorizontalStackLayout HorizontalOptions="End">
                         <Button
-                            Command="{Binding PreviousPageCommand}"
+                            Command="{Binding AssignedPreviousPageCommand}"
                             Text="Previous Page"
                             TextColor="{StaticResource PrimaryLight}"
                             FontSize="18"
                             FontFamily="LexendSemiBold"
                             Margin="0,0,0,10">
                             <Button.Triggers>
-                                <DataTrigger TargetType="Button" Binding="{Binding CurrentPage}" Value="1">
+                                <DataTrigger TargetType="Button" Binding="{Binding AssignedCurrentPage}" Value="1">
                                     <Setter Property="IsVisible" Value="False" />
                                 </DataTrigger>
                             </Button.Triggers>
@@ -132,8 +143,8 @@
                             Margin="0,0,0,10">
                             <Label.Text>
                                 <MultiBinding StringFormat="[ {0}/{1} ]">
-                                    <Binding Path="CurrentPage" />
-                                    <Binding Path="LastPage" />
+                                    <Binding Path="AssignedCurrentPage" />
+                                    <Binding Path="AssignedLastPage" />
                                 </MultiBinding>
                             </Label.Text>
                             <Label.FontSize>18</Label.FontSize>
@@ -143,15 +154,15 @@
                             <Label.FontFamily>LexendSemiBold</Label.FontFamily>
                         </Label>
                         <Button
-                            Command="{Binding NextPageCommand}"
+                            Command="{Binding AssignedNextPageCommand}"
                             Text="Next Page"
                             TextColor="{StaticResource PrimaryLight}"
                             FontSize="18"
                             FontFamily="LexendSemiBold"
                             Margin="0,0,0,10">
                             <Button.Triggers>
-                                <DataTrigger TargetType="Button" Binding="{Binding CurrentPage}"
-                                             Value="{Binding LastPage}">
+                                <DataTrigger TargetType="Button" Binding="{Binding AssignedCurrentPage}"
+                                             Value="{Binding AssignedLastPage}">
                                     <Setter Property="IsVisible" Value="False" />
                                 </DataTrigger>
                             </Button.Triggers>
@@ -160,5 +171,110 @@
                 </VerticalStackLayout>
             </ScrollView>
         </RefreshView>
+
+        <Label Grid.Row="3"
+               Text="Unassigned Tickets"
+               FontFamily="LexendLight"
+               FontSize="21"
+               TextColor="{StaticResource PrimaryLight}"
+               VerticalTextAlignment="Center"
+               HorizontalOptions="Start">
+
+            <Label.Triggers>
+                <DataTrigger TargetType="Label" Binding="{Binding IsAdmin}" Value="False">
+                    <Setter Property="IsVisible" Value="False" />
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
+
+        <RefreshView Grid.Row="4"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView VerticalScrollBarVisibility="Never">
+                <VerticalStackLayout Spacing="10">
+                    <CollectionView ItemsSource="{Binding UnassignedTickets}">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
+                                             Span="5"
+                                             HorizontalItemSpacing="15"
+                                             VerticalItemSpacing="15" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type model:Ticket}">
+                                <Border HorizontalOptions="FillAndExpand"
+                                        Padding="10"
+                                        HeightRequest="75"
+                                        BackgroundColor="White">
+
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:HomePageViewModel}},
+                                                Path= TicketDetailsCommand}"
+                                            CommandParameter="{Binding}" />
+                                    </Border.GestureRecognizers>
+
+                                    <VerticalStackLayout>
+
+                                        <Label Text="{Binding ., Converter={StaticResource TicketFormatConverter}}"
+                                               TextColor="{Binding Priority, Converter={StaticResource PriorityToColorConverter}}"
+                                               VerticalTextAlignment="Center"
+                                               FontSize="21"
+                                               FontFamily="LexendBold" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+
+                    <HorizontalStackLayout HorizontalOptions="End">
+                        <Button
+                            Command="{Binding UnassignedPreviousPageCommand}"
+                            Text="Previous Page"
+                            TextColor="{StaticResource PrimaryLight}"
+                            FontSize="18"
+                            FontFamily="LexendSemiBold"
+                            Margin="0,0,0,10">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding UnassignedCurrentPage}" Value="1">
+                                    <Setter Property="IsVisible" Value="False" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                        <Label
+                            VerticalOptions="Center"
+                            Margin="0,0,0,10">
+                            <Label.Text>
+                                <MultiBinding StringFormat="[ {0}/{1} ]">
+                                    <Binding Path="UnassignedCurrentPage" />
+                                    <Binding Path="UnassignedLastPage" />
+                                </MultiBinding>
+                            </Label.Text>
+                            <Label.FontSize>18</Label.FontSize>
+                            <Label.TextColor>
+                                <StaticResource Key="PrimaryLight" />
+                            </Label.TextColor>
+                            <Label.FontFamily>LexendSemiBold</Label.FontFamily>
+                        </Label>
+                        <Button
+                            Command="{Binding UnassignedNextPageCommand}"
+                            Text="Next Page"
+                            TextColor="{StaticResource PrimaryLight}"
+                            FontSize="18"
+                            FontFamily="LexendSemiBold"
+                            Margin="0,0,0,10">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding UnassignedCurrentPage}"
+                                             Value="{Binding UnassignedLastPage}">
+                                    <Setter Property="IsVisible" Value="False" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+
+
     </Grid>
 </ContentPage>

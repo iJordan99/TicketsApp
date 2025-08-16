@@ -7,6 +7,7 @@ using TicketsApp.Parsers;
 using TicketsApp.Services;
 using TicketsApp.ViewModels;
 using TicketsApp.Views;
+
 namespace TicketsApp;
 
 public static class MauiProgram
@@ -84,9 +85,11 @@ public static class MauiProgram
 
         mauiAppBuilder.Services.AddSingleton<IJsonParsingHelper, JsonParsingHelper>();
 
+        mauiAppBuilder.Services.AddSingleton<IQueryStringBuilder, QueryStringBuilder>();
         mauiAppBuilder.Services.AddSingleton<ITicketParser, TicketParser>();
         mauiAppBuilder.Services.AddSingleton<ITicketService, TicketService>();
         mauiAppBuilder.Services.AddSingleton<IErrorParser, ErrorParser>();
+        mauiAppBuilder.Services.AddSingleton<IMetaParser, MetaParser>();
         mauiAppBuilder.Services.AddSingleton<IPostApiResponseService, PostApiResponseService>();
 
         mauiAppBuilder.Services.AddSingleton<IJsonParsingHelper, JsonParsingHelper>();
