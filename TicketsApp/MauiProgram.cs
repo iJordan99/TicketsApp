@@ -64,6 +64,7 @@ public static class MauiProgram
 
 
         mauiAppBuilder.Services.AddSingleton<IEngineerTicketService, EngineerTicketService>();
+        mauiAppBuilder.Services.AddSingleton<IEngineerService, EngineerService>();
 
         mauiAppBuilder.Services.AddSingleton(new JsonSerializerOptions
         {

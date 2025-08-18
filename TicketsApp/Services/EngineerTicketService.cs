@@ -14,7 +14,7 @@ public class EngineerTicketService(
     JsonSerializerOptions serializerOptions)
     : IEngineerTicketService
 {
-    public Task<HttpResponseMessage> AssignEngineer(Ticket ticket, int engineer)
+    public Task<HttpResponseMessage> AssignEngineer(Ticket ticket, User engineer)
     {
         var payload = new
         {
@@ -22,20 +22,23 @@ public class EngineerTicketService(
             {
                 attributes = new
                 {
-                    engineer
+                    engineer = engineer.Id
                 }
             }
         };
         var jsonPayload = JsonSerializer.Serialize(payload, serializerOptions);
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-        var uri = $"https://tickets.test/api/v1/tickets/{ticket.Id}/engineer";
+        return httpClient.PostAsync(EngineerTicketApiRoutes.AssignEngineer(ticket), content);
+    }
 
-        return httpClient.PostAsync(uri, content);
+    public Task<HttpResponseMessage> RemoveEngineer(Ticket ticket, User engineer)
+    {
+        return httpClient.DeleteAsync(EngineerTicketApiRoutes.RemoveEngineer(ticket, engineer));
     }
 
     public async Task<HttpResponseMessage> GetTickets(int? page)
     {
-        return await httpClient.GetAsync(EngineerTicketApiRoutes.GetEngineerAssignedTickets(page));
+        return await httpClient.GetAsync(EngineerTicketApiRoutes.EngineerAssignedTickets(page));
     }
 }

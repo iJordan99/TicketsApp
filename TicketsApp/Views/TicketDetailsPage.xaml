@@ -110,41 +110,53 @@
                                        TextColor="#1A2D42" />
                             </HorizontalStackLayout>
 
-                            <Label Text="Engineers"
-                                   FontSize="20"
-                                   FontFamily="LexendBold"
-                                   TextColor="{StaticResource Primary}" />
+                            <Label
+                                Text="{Binding TicketData.Engineers.Count, StringFormat='Assigned Engineers [ {0} ]'}"
+                                FontSize="20"
+                                FontFamily="LexendBold"
+                                TextColor="{StaticResource Primary}" />
 
-                            <Button
-                                Text="Assign"
-                                BackgroundColor="#1A2D42"
-                                TextColor="White"
-                                Command="{Binding AssignEngineerCommand}" />
+                            <CollectionView ItemsSource="{Binding TicketData.Engineers}">
+                                <CollectionView.ItemsLayout>
+                                    <GridItemsLayout Orientation="Vertical"
+                                                     Span="7" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="{x:Type model:User}">
+                                        <Border HorizontalOptions="FillAndExpand"
+                                                BackgroundColor="White">
 
-                            <VerticalStackLayout>
-                                <CollectionView ItemsSource="{Binding TicketData.Engineers}">
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate x:DataType="{x:Type model:User}">
-                                            <HorizontalStackLayout Spacing="20">
-                                                <Label Text="{Binding Name}"
-                                                       VerticalTextAlignment="Center"
-                                                       Margin="0,10,0,0"
-                                                       TextColor="#1A2D42"
-                                                       FontSize="20"
-                                                       FontFamily="LexendLight" />
+                                            <VerticalStackLayout>
+
+                                                <HorizontalStackLayout Spacing="5">
+                                                    <Label Text="{Binding Name}"
+                                                           TextColor="{StaticResource Primary}"
+                                                           VerticalTextAlignment="Center"
+                                                           FontSize="20"
+                                                           FontFamily="LexendRegular" />
+
+                                                    <Button
+                                                        Text="Remove"
+                                                        BackgroundColor="{StaticResource Primary}"
+                                                        TextColor="White"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TicketDetailsViewModel}}, Path=RemoveEngineerCommand}"
+                                                        CommandParameter="{Binding .}" />
+
+                                                </HorizontalStackLayout>
+
 
                                                 <Label Text="{Binding Email}"
                                                        VerticalTextAlignment="Center"
-                                                       Margin="0,10,0,0"
-                                                       TextColor="#1A2D42"
-                                                       FontSize="20"
-                                                       FontFamily="LexendLight" />
-                                            </HorizontalStackLayout>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-
-                                </CollectionView>
-                            </VerticalStackLayout>
+                                                       Margin="0,5,0,0"
+                                                       TextColor="{StaticResource PrimaryDark}"
+                                                       FontSize="21"
+                                                       FontFamily="LexendThin"
+                                                       MaxLines="3" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -229,6 +241,62 @@
                                     CornerRadius="10" />
                         </Grid>
                     </VerticalStackLayout>
+                </Border>
+
+                <Label Text="Assign Engineer"
+                       Margin="5,10,0,0"
+                       TextColor="{StaticResource Primary}"
+                       FontSize="20"
+                       FontFamily="LexendLight" />
+
+                <Border HorizontalOptions="FillAndExpand"
+                        Padding="10"
+                        BackgroundColor="White">
+
+                    <CollectionView ItemsSource="{Binding Engineers}">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
+                                             Span="7"
+                                             HorizontalItemSpacing="20" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type model:User}">
+                                <Border HorizontalOptions="FillAndExpand"
+                                        BackgroundColor="White">
+
+                                    <VerticalStackLayout Spacing="5">
+
+                                        <HorizontalStackLayout Spacing="5">
+                                            <Label Text="{Binding Name}"
+                                                   TextColor="{StaticResource Primary}"
+                                                   VerticalTextAlignment="Center"
+                                                   FontSize="20"
+                                                   FontFamily="LexendRegular" />
+
+                                            <Button
+                                                Text="Assign"
+                                                BackgroundColor="{StaticResource Primary}"
+                                                TextColor="White"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TicketDetailsViewModel}}, Path=AssignEngineerCommand}"
+                                                CommandParameter="{Binding .}" />
+
+                                        </HorizontalStackLayout>
+
+
+                                        <Label Text="{Binding Email}"
+                                               VerticalTextAlignment="Center"
+                                               TextColor="{StaticResource PrimaryDark}"
+                                               FontSize="20"
+                                               FontFamily="LexendThin"
+                                               MaxLines="3" />
+
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+
                 </Border>
             </VerticalStackLayout>
         </ScrollView>

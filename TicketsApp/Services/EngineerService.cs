@@ -1,11 +1,13 @@
 using TicketsApp.Interfaces;
+using TicketsApp.Utilities;
 
 namespace TicketsApp.Services;
 
-public class EngineerService : IEngineerService
+public class EngineerService(HttpClient httpClient) : IEngineerService
 {
-    public Task<HttpResponseMessage> GetEngineers()
+    public async Task<HttpResponseMessage> GetEngineers()
     {
-        throw new NotImplementedException();
+        return await httpClient.GetAsync(
+            EngineerApiRoutes.GetEngineersUrl());
     }
 }

@@ -112,5 +112,4 @@
                 Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}" />
     </Style>
 
-
 </ResourceDictionary>

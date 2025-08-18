@@ -1,6 +1,8 @@
+using System.Collections.ObjectModel;
 using System.Text.Json;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
+
 namespace TicketsApp.Parsers;
 
 /// <summary>
@@ -25,20 +27,76 @@ public class UserParser(IJsonParsingHelper jsonHelper) : IUserParser
     /// </returns>
     public User? Parse(JsonElement element)
     {
-        if (!element.TryGetProperty("id", out var idElement) || idElement.ValueKind == JsonValueKind.Null)
-        {
-            return null;
-        }
+        if (!element.TryGetProperty("id", out var idElement) || idElement.ValueKind == JsonValueKind.Null) return null;
 
         var attributes = element.TryGetProperty("attributes", out var attrElement) ? attrElement : element;
+
+        var isEngineer = false;
+        if (attributes.TryGetProperty("is_engineer", out var isEngineerElement) &&
+            (isEngineerElement.ValueKind == JsonValueKind.True || isEngineerElement.ValueKind == JsonValueKind.False))
+            isEngineer = isEngineerElement.GetBoolean();
+
+        var isAdmin = false;
+        if (attributes.TryGetProperty("is_admin", out var isAdminElement) &&
+            (isAdminElement.ValueKind == JsonValueKind.True || isAdminElement.ValueKind == JsonValueKind.False))
+            isAdmin = isAdminElement.GetBoolean();
 
         return new User
         (
             jsonHelper.GetStringField(attributes, "email"),
             idElement.GetInt32(),
-            attributes.TryGetProperty("is_engineer", out var isEng),
-            attributes.TryGetProperty("is_admin", out var isAdmin),
+            isEngineer,
+            isAdmin,
             jsonHelper.GetStringField(attributes, "name")
         );
+    }
+
+    public async Task<ObservableCollection<User>> ParseMany(HttpResponseMessage response)
+    {
+        var list = new ObservableCollection<User>();
+
+        var json = await response.Content.ReadAsStringAsync();
+        using var jsonDoc = JsonDocument.Parse(json);
+        var root = jsonDoc.RootElement;
+
+        if (root.TryGetProperty("data", out var data))
+        {
+            if (data.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in data.EnumerateArray())
+                {
+                    var user = Parse(item);
+                    if (user is not null) list.Add(user);
+                }
+
+                return list;
+            }
+
+            if (data.ValueKind == JsonValueKind.Object)
+            {
+                var user = Parse(data);
+                if (user is not null) list.Add(user);
+                return list;
+            }
+        }
+
+        if (root.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var item in root.EnumerateArray())
+            {
+                var user = Parse(item);
+                if (user is not null) list.Add(user);
+            }
+
+            return list;
+        }
+
+        if (root.ValueKind == JsonValueKind.Object)
+        {
+            var user = Parse(root);
+            if (user is not null) list.Add(user);
+        }
+
+        return list;
     }
 }

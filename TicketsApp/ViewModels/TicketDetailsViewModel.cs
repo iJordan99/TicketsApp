@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TicketsApp.Interfaces;
@@ -9,15 +10,21 @@ public partial class TicketDetailsViewModel(
     IAppState appState,
     ITicketParser ticketParser,
     IErrorParser errorParser,
+    IUserParser userParser,
     ITicketService ticketService,
+    IEngineerService engineerService,
     IEngineerTicketService engineerTicketService)
     : BaseViewModel(appState), IQueryAttributable
 {
+    [ObservableProperty] private ObservableCollection<User> _engineers;
+
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private bool _isRefreshing;
     [ObservableProperty] private string _newComment;
+    [ObservableProperty] private User? _selectedEngineer;
     [ObservableProperty] private Ticket? _ticket;
     [ObservableProperty] private TicketWithIncludes? _ticketData;
+
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -27,6 +34,8 @@ public partial class TicketDetailsViewModel(
 
     private async void LoadDataAsync()
     {
+        var engineers = await engineerService.GetEngineers();
+        Engineers = await userParser.ParseMany(engineers);
         await GetTicketData();
     }
 
@@ -52,7 +61,6 @@ public partial class TicketDetailsViewModel(
 
         NewComment = string.Empty;
         await RefreshAsync();
-        await Shell.Current.DisplayAlert("Success", "Comment added.", "OK");
     }
 
     [RelayCommand]
@@ -66,11 +74,21 @@ public partial class TicketDetailsViewModel(
     }
 
     [RelayCommand]
-    private async Task AssignEngineer()
+    private async Task AssignEngineer(User engineer)
     {
         if (Ticket != null)
         {
-            var assigned = await engineerTicketService.AssignEngineer(Ticket, 11);
+            var assigned = await engineerTicketService.AssignEngineer(Ticket, engineer);
+            // var response = await errorParser.Parse(assigned);
+            await RefreshAsync();
         }
+    }
+
+    [RelayCommand]
+    private async Task RemoveEngineer(User engineer)
+    {
+        var remove = await engineerTicketService.RemoveEngineer(Ticket, engineer);
+
+        if (remove.IsSuccessStatusCode) await RefreshAsync();
     }
 }

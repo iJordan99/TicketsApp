@@ -1,9 +1,10 @@
-using System.Collections.ObjectModel;
 using TicketsApp.Models;
+
 namespace TicketsApp.Interfaces;
 
 public interface IEngineerTicketService
 {
-    Task<ObservableCollection<Ticket>> GetEngineerTickets(int? page = null);
-    Task<ApiResponseMetaData?> GetResponseMetaData();
+    Task<HttpResponseMessage> GetTickets(int? page = null);
+    Task<HttpResponseMessage> AssignEngineer(Ticket ticket, User engineer);
+    Task<HttpResponseMessage> RemoveEngineer(Ticket ticket, User engineer);
 }
