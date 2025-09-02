@@ -16,22 +16,6 @@ public class TicketService(
     IQueryStringBuilder queryStringBuilder) : ITicketService
 {
     /// <summary>
-    ///     Retrieves a detailed ticket with additional related information, such as comments, author, and engineers, based on
-    ///     the specified ticket.
-    /// </summary>
-    /// <param name="ticket">The ticket for which detailed information is required.</param>
-    /// <returns>
-    ///     A <see cref="TicketWithIncludes" /> object containing the ticket details with included related data,
-    ///     or <c>null</c> if the operation is unsuccessful or the response status is not successful.
-    /// </returns>
-    public async Task<HttpResponseMessage> GetTicketWithIncludes(Ticket ticket)
-    {
-        return await httpClient.GetAsync(
-                TicketApiRoutes.GetTicketWithIncludesUri(ticket.Id, "comment,author,engineer"));
-        
-    }
-
-    /// <summary>
     ///     Adds a comment to the specified ticket.
     /// </summary>
     /// <param name="comment">The comment to be added to the ticket.</param>
@@ -53,7 +37,7 @@ public class TicketService(
         var jsonPayload = JsonSerializer.Serialize(payload, serializerOptions);
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-        return await httpClient.PostAsync(TicketApiRoutes.AddComment(ticket.Id), content);
+        return await httpClient.PostAsync(TicketApiRoutes.AddComment(ticket), content);
     }
 
     public async Task<HttpResponseMessage> GetTickets(TicketQueryParameters? parameters)
@@ -63,5 +47,45 @@ public class TicketService(
         var uri = string.IsNullOrEmpty(queryString) ? baseUri : $"{baseUri}?{queryString}";
 
         return await httpClient.GetAsync(uri);
+    }
+
+    /// <summary>
+    ///     Retrieves a detailed ticket with additional related information, such as comments, author, and engineers, based on
+    ///     the specified ticket.
+    /// </summary>
+    /// <param name="ticket">The ticket for which detailed information is required.</param>
+    /// <param name="includes">data resources to include in the request</param>
+    /// <returns>
+    ///     A <see cref="TicketWithIncludes" /> object containing the ticket details with included related data,
+    ///     or <c>null</c> if the operation is unsuccessful or the response status is not successful.
+    /// </returns>
+    public async Task<HttpResponseMessage> GetTicketWithIncludes(Ticket ticket, string includes = "")
+    {
+        return await httpClient.GetAsync(
+            TicketApiRoutes.TicketWithIncludes(ticket, includes));
+    }
+
+    public async Task<HttpResponseMessage> UpdateTicket(Ticket ticket, User user, (string Key, string Value)[] data)
+    {
+        var attributes = new Dictionary<string, object>();
+        foreach (var (key, value) in data) attributes[key] = value;
+
+        var payload = new
+        {
+            data = new
+            {
+                attributes
+            }
+        };
+
+        var jsonPayload = JsonSerializer.Serialize(payload, serializerOptions);
+        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+        return await httpClient.PatchAsync(TicketApiRoutes.BaseTicket(ticket), content);
+    }
+
+    public async Task<HttpResponseMessage> DeleteTicket(Ticket ticket)
+    {
+        return await httpClient.DeleteAsync(TicketApiRoutes.BaseTicket(ticket));
     }
 }

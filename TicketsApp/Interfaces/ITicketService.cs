@@ -4,8 +4,9 @@ namespace TicketsApp.Interfaces;
 
 public interface ITicketService
 {
-    Task<HttpResponseMessage> GetTicketWithIncludes(Ticket ticket);
+    Task<HttpResponseMessage> GetTicketWithIncludes(Ticket ticket, string includes);
     Task<HttpResponseMessage> AddComment(string comment, Ticket ticket);
-
     Task<HttpResponseMessage> GetTickets(TicketQueryParameters? parameters);
+    Task<HttpResponseMessage> UpdateTicket(Ticket ticket, User user, (string Key, string Value)[] data);
+    Task<HttpResponseMessage> DeleteTicket(Ticket ticket);
 }

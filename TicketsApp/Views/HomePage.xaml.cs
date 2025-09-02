@@ -1,4 +1,5 @@
 using TicketsApp.ViewModels;
+
 namespace TicketsApp.Views;
 
 public partial class HomePage : ContentPage
@@ -8,5 +9,10 @@ public partial class HomePage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-    
+
+    protected override void OnAppearing()
+    {
+        _ = ((HomePageViewModel)BindingContext).RefreshAsync();
+        base.OnAppearing();
+    }
 }

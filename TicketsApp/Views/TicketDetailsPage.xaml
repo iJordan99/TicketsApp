@@ -23,7 +23,6 @@
                         BackgroundColor="White">
 
                     <VerticalStackLayout Spacing="15">
-
                         <Label Text="{Binding TicketData, Converter={StaticResource TicketFormatConverter}}"
                                TextColor="{Binding TicketData.Priority, Converter={StaticResource PriorityToColorConverter}}"
                                VerticalTextAlignment="Center"
@@ -59,7 +58,6 @@
                                FontFamily="LexendBold" />
 
                         <Label Text="{Binding TicketData.ErrorCode}"
-                               VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
                                TextColor="#1A2D42"
                                FontSize="20"
@@ -137,6 +135,7 @@
 
                                                     <Button
                                                         Text="Remove"
+                                                        IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TicketDetailsViewModel}}, Path=IsEngineer }"
                                                         BackgroundColor="{StaticResource Primary}"
                                                         TextColor="White"
                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:TicketDetailsViewModel}}, Path=RemoveEngineerCommand}"
@@ -173,11 +172,22 @@
 
 
                     <VerticalStackLayout>
-                        <CollectionView ItemsSource="{Binding TicketData.Comments}">
+                        <CollectionView ItemsSource="{Binding TicketData.Comments}"
+                                        HeightRequest="300">
+                            <CollectionView.Triggers>
+                                <DataTrigger TargetType="CollectionView"
+                                             Binding="{Binding TicketData.Comments.Count}"
+                                             Value="0">
+                                    <Setter Property="HeightRequest" Value="0" />
+                                </DataTrigger>
+                            </CollectionView.Triggers>
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="{x:Type model:Comment}">
                                     <Grid ColumnDefinitions="50, *" RowDefinitions="Auto, Auto" Padding="10">
-                                        <!-- Profile Image -->
+
                                         <Image Grid.RowSpan="2"
                                                Grid.Column="0"
                                                Source="person.png"
@@ -187,7 +197,6 @@
                                                VerticalOptions="Start"
                                                Margin="5" />
 
-                                        <!-- User Info (Name + Date) -->
                                         <VerticalStackLayout Grid.Column="1"
                                                              Spacing="5"
                                                              Margin="5,0,0,0">
@@ -196,15 +205,12 @@
                                                    FontFamily="LexendBold"
                                                    TextColor="{Binding User, Converter={StaticResource EngineerToColourConverter}}"
                                                    VerticalTextAlignment="Center" />
-
                                             <Label Text="{Binding Date, StringFormat='{0:MMM d, yyyy - h:mm tt}'}"
                                                    FontSize="20"
                                                    FontFamily="LexendLight"
                                                    TextColor="{StaticResource PrimaryLight}"
                                                    VerticalTextAlignment="Center" />
                                         </VerticalStackLayout>
-
-                                        <!-- Comment Text -->
                                         <Label Grid.Row="1"
                                                Grid.Column="1"
                                                Text="{Binding Text}"
@@ -217,7 +223,6 @@
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-
                         <Grid ColumnDefinitions="*, Auto" Padding="10" ColumnSpacing="10">
                             <Entry
                                 Placeholder="New Comment"
@@ -229,14 +234,13 @@
                                 Text="{Binding NewComment}"
                                 Margin="0,0,10,0"
                                 BackgroundColor="Transparent" />
-                            <!-- </Border> -->
 
                             <Button Grid.Column="1"
                                     Text=" + "
                                     FontFamily="LexendSemiBold"
-                                    BackgroundColor="#1A2D42"
+                                    BackgroundColor="{StaticResource Primary}"
                                     TextColor="White"
-                                    Padding="10,5"
+                                    Padding="10,10"
                                     Command="{Binding AddCommentCommand}"
                                     CornerRadius="10" />
                         </Grid>
@@ -247,11 +251,13 @@
                        Margin="5,10,0,0"
                        TextColor="{StaticResource Primary}"
                        FontSize="20"
-                       FontFamily="LexendLight" />
+                       FontFamily="LexendLight"
+                       IsVisible="{Binding IsEngineer}" />
 
                 <Border HorizontalOptions="FillAndExpand"
                         Padding="10"
-                        BackgroundColor="White">
+                        BackgroundColor="White"
+                        IsVisible="{Binding IsEngineer}">
 
                     <CollectionView ItemsSource="{Binding Engineers}">
                         <CollectionView.ItemsLayout>
@@ -295,9 +301,130 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-
-
                 </Border>
+
+
+                <Grid ColumnDefinitions="*,*"
+                      HorizontalOptions="FillAndExpand"
+                      ColumnSpacing="20">
+                    <HorizontalStackLayout Grid.Column="0"
+                                           Spacing="10"
+                                           HorizontalOptions="Start"
+                                           IsVisible="{Binding IsEngineer}">
+
+                        <Label Text="Priority :"
+                               Margin="5,10,0,0"
+                               TextColor="{StaticResource Primary}"
+                               FontSize="20"
+                               FontFamily="LexendLight" />
+
+                        <Button
+                            Text="High"
+                            BackgroundColor="#B91C1C"
+                            TextColor="White"
+                            Margin="0,5,0,0"
+                            FontSize="18"
+                            FontFamily="LexendRegular"
+                            Command="{Binding UpdatePriorityCommand}"
+                            CommandParameter="High" />
+
+                        <Button
+                            Text="Medium"
+                            BackgroundColor="#D97706"
+                            TextColor="White"
+                            Margin="0,5,0,0"
+                            FontSize="18"
+                            FontFamily="LexendRegular"
+                            Command="{Binding UpdatePriorityCommand}"
+                            CommandParameter="Medium" />
+
+                        <Button
+                            Text="Low"
+                            BackgroundColor="#047857"
+                            TextColor="White"
+                            Margin="0,5,0,0"
+                            FontSize="18"
+                            FontFamily="LexendRegular"
+                            Command="{Binding UpdatePriorityCommand}"
+                            CommandParameter="low" />
+
+                    </HorizontalStackLayout>
+
+
+                    <HorizontalStackLayout Grid.Column="1"
+                                           Spacing="10"
+                                           HorizontalOptions="End"
+                                           IsVisible="{Binding IsEngineer}">
+
+                        <Label Text="Status :"
+                               Margin="5,10,0,0"
+                               TextColor="{StaticResource Primary}"
+                               FontSize="20"
+                               FontFamily="LexendLight" />
+
+                        <Button
+                            Text="Active"
+                            BackgroundColor="Green"
+                            TextColor="White"
+                            Margin="0,5,0,0"
+                            FontSize="18"
+                            FontFamily="LexendRegular"
+                            Command="{Binding UpdateStatusCommand}"
+                            CommandParameter="A" />
+
+                        <Button
+                            Text="Hold"
+                            BackgroundColor="Orange"
+                            TextColor="White"
+                            Margin="0,5,0,0"
+                            FontSize="18"
+                            FontFamily="LexendRegular"
+                            Command="{Binding UpdateStatusCommand}"
+                            CommandParameter="H" />
+
+                        <Button
+                            Text="Cancel"
+                            BackgroundColor="Gray"
+                            TextColor="White"
+                            Margin="0,5,0,0"
+                            FontSize="18"
+                            FontFamily="LexendRegular"
+                            Command="{Binding UpdateStatusCommand}"
+                            CommandParameter="X" />
+
+                        <Button
+                            Text="Close"
+                            BackgroundColor="DarkBlue"
+                            TextColor="White"
+                            Margin="0,5,0,0"
+                            FontSize="18"
+                            FontFamily="LexendRegular"
+                            Command="{Binding UpdateStatusCommand}"
+                            CommandParameter="C" />
+
+                        <Button
+                            Text="Delete"
+                            BackgroundColor="Red"
+                            TextColor="White"
+                            Margin="0,5,0,0"
+                            FontSize="18"
+                            FontFamily="LexendRegular"
+                            Command="{Binding DeleteTicketCommand}"
+                            CommandParameter="{Binding Ticket}" />
+                    </HorizontalStackLayout>
+                    <Button
+                        Grid.ColumnSpan="2"
+                        IsVisible="{Binding IsNotEngineer}"
+                        Text="Delete"
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        Margin="0,5,0,0"
+                        FontSize="18"
+                        FontFamily="LexendRegular"
+                        Command="{Binding DeleteTicketCommand}"
+                        CommandParameter="{Binding Ticket}" />
+                </Grid>
+
             </VerticalStackLayout>
         </ScrollView>
     </RefreshView>
