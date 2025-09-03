@@ -76,7 +76,8 @@
                     FontFamily="LexendRegular"
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="White"
-                    IsVisible="{Binding IsNotEngineer}" />
+                    IsVisible="{Binding IsNotEngineer}"
+                    Command="{Binding CreateTicketCommand}" />
         </HorizontalStackLayout>
 
 

@@ -49,10 +49,12 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddTransient<HomePage>();
         mauiAppBuilder.Services.AddTransient<LoginPage>();
         mauiAppBuilder.Services.AddTransient<TicketDetailsPage>();
+        mauiAppBuilder.Services.AddTransient<CreateTicketPage>();
         //ViewModel
         mauiAppBuilder.Services.AddTransient<HomePageViewModel>();
         mauiAppBuilder.Services.AddTransient<LoginPageViewModel>();
         mauiAppBuilder.Services.AddTransient<TicketDetailsViewModel>();
+        mauiAppBuilder.Services.AddTransient<CreateTicketPageViewModel>();
         return mauiAppBuilder;
     }
 

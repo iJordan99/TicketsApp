@@ -10,7 +10,8 @@ public class TicketFormatConverter : IValueConverter
         { "A", "Active" },
         { "C", "Closed" },
         { "H", "Hold" },
-        { "X", "Cancelled" }
+        { "X", "Cancelled" },
+        { "N", "New" }
     };
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

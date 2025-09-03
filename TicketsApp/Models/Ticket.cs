@@ -1,9 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace TicketsApp.Models;
 
 public partial class Ticket : ObservableObject
 {
-
     [ObservableProperty] private DateTime _createdOn;
 
     [ObservableProperty] private string? _description;
@@ -37,5 +37,9 @@ public partial class Ticket : ObservableObject
         ReproductionStep = reproductionStep;
         CreatedOn = createdOn;
         UpdatedOn = updatedOn;
+    }
+
+    public Ticket()
+    {
     }
 }
