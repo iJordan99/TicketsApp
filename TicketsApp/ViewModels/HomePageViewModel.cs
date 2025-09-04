@@ -8,6 +8,13 @@ using TicketsApp.Views;
 
 namespace TicketsApp.ViewModels;
 
+public enum TicketPageType
+{
+    Assigned,
+    Unassigned,
+    User
+}
+
 public partial class HomePageViewModel : BaseViewModel
 {
     private const int FirstPage = 1;
@@ -16,44 +23,33 @@ public partial class HomePageViewModel : BaseViewModel
     private readonly IMetaParser _metaParser;
     private readonly ITicketParser _ticketParser;
     private readonly ITicketService _ticketService;
+
     [ObservableProperty] private int _assignedCurrentPage;
     [ObservableProperty] private int _assignedLastPage;
-
     [ObservableProperty] private ObservableCollection<Ticket>? _assignedTickets;
     [ObservableProperty] private int _assignedTotalPages;
 
-    [ObservableProperty] private bool? _isAdmin;
-
     [ObservableProperty] private bool _isBusy;
-    [ObservableProperty] private bool? _isEngineer;
-    [ObservableProperty] private bool? _isNotEngineer;
     [ObservableProperty] private bool? _isRefreshing;
+
     [ObservableProperty] private int _unassignedCurrentPage;
     [ObservableProperty] private int _unassignedLastPage;
-
     [ObservableProperty] private ObservableCollection<Ticket>? _unassignedTickets;
     [ObservableProperty] private int _unassignedTotalPages;
 
-    [ObservableProperty] private string? _username;
     [ObservableProperty] private int _userTicketCurrentPage;
     [ObservableProperty] private int _userTicketLastPage;
-
     [ObservableProperty] private ObservableCollection<Ticket>? _userTickets;
     [ObservableProperty] private int _userTicketTotalPages;
 
     public HomePageViewModel(IAppState appState, IEngineerTicketService engineerTicketService,
-        ITicketService ticketService, ITicketParser ticketParser,
-        IMetaParser metaParser) : base(appState)
+        ITicketService ticketService, ITicketParser ticketParser, IMetaParser metaParser)
+        : base(appState)
     {
         _engineerTicketService = engineerTicketService;
         _ticketService = ticketService;
         _ticketParser = ticketParser;
         _metaParser = metaParser;
-
-        Username = AppState.CurrentUser?.Name;
-        IsEngineer = AppState.CurrentUser?.IsEngineer ?? false;
-        IsAdmin = AppState.CurrentUser?.IsAdmin;
-        IsNotEngineer = !(IsEngineer ?? false);
 
         AssignedCurrentPage = FirstPage;
         UnassignedCurrentPage = FirstPage;
@@ -78,10 +74,10 @@ public partial class HomePageViewModel : BaseViewModel
     {
         if (IsEngineer ?? false)
         {
-            var assignedTask = LoadAssignedTickets(FirstPage);
-            var unassignedTask = LoadUnassignedTickets(FirstPage);
-
-            await Task.WhenAll(assignedTask, unassignedTask);
+            await Task.WhenAll(
+                LoadAssignedTickets(FirstPage),
+                LoadUnassignedTickets(FirstPage)
+            );
             return;
         }
 
@@ -109,8 +105,7 @@ public partial class HomePageViewModel : BaseViewModel
     [RelayCommand]
     private async Task TicketDetails(Ticket ticket)
     {
-        if (ticket == null)
-            return;
+        if (ticket == null) return;
 
         var navigationParameters = new Dictionary<string, object>
         {
@@ -130,37 +125,13 @@ public partial class HomePageViewModel : BaseViewModel
     [RelayCommand]
     private async Task LoadUserTickets(int page)
     {
-        var reqParams = new TicketQueryParameters
-        {
-            Page = page
-        };
+        var reqParams = new TicketQueryParameters { Page = page };
         var response = await _ticketService.GetTickets(reqParams);
         UserTickets = await _ticketParser.ParseTickets(response);
 
         var meta = await _metaParser.Parse(response);
         UserTicketTotalPages = meta?.Total ?? 0;
         UserTicketLastPage = meta?.LastPage ?? FirstPage;
-    }
-
-
-    [RelayCommand]
-    private async Task UserTicketPreviousPage()
-    {
-        if (UserTicketCurrentPage == FirstPage)
-            return;
-
-        UserTicketCurrentPage -= 1;
-        await LoadUserTickets(UserTicketCurrentPage);
-    }
-
-    [RelayCommand]
-    private async Task UserTicketNextPage()
-    {
-        if (UserTicketCurrentPage == UserTicketLastPage)
-            return;
-
-        UserTicketCurrentPage += 1;
-        await LoadUserTickets(UserTicketCurrentPage);
     }
 
     private async Task LoadAssignedTickets(int page)
@@ -171,26 +142,6 @@ public partial class HomePageViewModel : BaseViewModel
         var meta = await _metaParser.Parse(response);
         AssignedTotalPages = meta?.Total ?? 0;
         AssignedLastPage = meta?.LastPage ?? FirstPage;
-    }
-
-    [RelayCommand]
-    private async Task AssignedPreviousPage()
-    {
-        if (AssignedCurrentPage == FirstPage)
-            return;
-
-        AssignedCurrentPage -= 1;
-        await LoadAssignedTickets(AssignedCurrentPage);
-    }
-
-    [RelayCommand]
-    private async Task AssignedNextPage()
-    {
-        if (AssignedCurrentPage == AssignedLastPage)
-            return;
-
-        AssignedCurrentPage += 1;
-        await LoadAssignedTickets(AssignedCurrentPage);
     }
 
     private async Task LoadUnassignedTickets(int page)
@@ -210,28 +161,52 @@ public partial class HomePageViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task UnassignedNextPage()
+    private async Task NextPage(TicketPageType type)
     {
-        if (UnassignedCurrentPage == UnassignedLastPage)
-            return;
+        switch (type)
+        {
+            case TicketPageType.Assigned:
+                if (AssignedCurrentPage == AssignedLastPage) return;
+                AssignedCurrentPage++;
+                await LoadAssignedTickets(AssignedCurrentPage);
+                break;
 
-        UnassignedCurrentPage += 1;
-        await LoadUnassignedTickets(UnassignedCurrentPage);
+            case TicketPageType.Unassigned:
+                if (UnassignedCurrentPage == UnassignedLastPage) return;
+                UnassignedCurrentPage++;
+                await LoadUnassignedTickets(UnassignedCurrentPage);
+                break;
+
+            case TicketPageType.User:
+                if (UserTicketCurrentPage == UserTicketLastPage) return;
+                UserTicketCurrentPage++;
+                await LoadUserTickets(UserTicketCurrentPage);
+                break;
+        }
     }
 
     [RelayCommand]
-    private async Task UnassignedPreviousPage()
+    private async Task PreviousPage(TicketPageType type)
     {
-        if (UnassignedCurrentPage == FirstPage)
-            return;
+        switch (type)
+        {
+            case TicketPageType.Assigned:
+                if (AssignedCurrentPage == FirstPage) return;
+                AssignedCurrentPage--;
+                await LoadAssignedTickets(AssignedCurrentPage);
+                break;
 
-        UnassignedCurrentPage -= 1;
-        await LoadUnassignedTickets(UnassignedCurrentPage);
-    }
+            case TicketPageType.Unassigned:
+                if (UnassignedCurrentPage == FirstPage) return;
+                UnassignedCurrentPage--;
+                await LoadUnassignedTickets(UnassignedCurrentPage);
+                break;
 
-    [RelayCommand]
-    private async Task CreateTicket()
-    {
-        await Shell.Current.GoToAsync(nameof(CreateTicketPage));
+            case TicketPageType.User:
+                if (UserTicketCurrentPage == FirstPage) return;
+                UserTicketCurrentPage--;
+                await LoadUserTickets(UserTicketCurrentPage);
+                break;
+        }
     }
 }

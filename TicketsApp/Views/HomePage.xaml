@@ -90,6 +90,7 @@
 
 
         <RefreshView
+            HeightRequest="550"
             Grid.Row="2"
             IsVisible="{Binding IsAdmin}"
             IsRefreshing="{Binding IsRefreshing}"
@@ -139,6 +140,7 @@
         </RefreshView>
 
         <RefreshView Grid.Row="2"
+                     HeightRequest="300"
                      IsRefreshing="{Binding IsRefreshing}"
                      Command="{Binding RefreshCommand}"
                      IsVisible="{Binding IsNotEngineer}">
@@ -193,7 +195,8 @@
             HorizontalOptions="End"
             IsVisible="{Binding IsAdmin}">
             <Button
-                Command="{Binding AssignedPreviousPageCommand}"
+                Command="{Binding PreviousPageCommand}"
+                CommandParameter="{x:Static viewModel:TicketPageType.Assigned}"
                 Text="Previous Page"
                 TextColor="{StaticResource PrimaryLight}"
                 FontSize="18"
@@ -221,7 +224,8 @@
                 <Label.FontFamily>LexendSemiBold</Label.FontFamily>
             </Label>
             <Button
-                Command="{Binding AssignedNextPageCommand}"
+                Command="{Binding NextPageCommand}"
+                CommandParameter="{x:Static viewModel:TicketPageType.Assigned}"
                 Text="Next Page"
                 TextColor="{StaticResource PrimaryLight}"
                 FontSize="18"
@@ -242,7 +246,8 @@
             HorizontalOptions="End"
             IsVisible="{Binding IsNotEngineer}">
             <Button
-                Command="{Binding UserTicketPreviousPageCommand}"
+                Command="{Binding PreviousPageCommand}"
+                CommandParameter="{x:Static viewModel:TicketPageType.User}"
                 Text="Previous Page"
                 TextColor="{StaticResource PrimaryLight}"
                 FontSize="18"
@@ -270,7 +275,8 @@
                 <Label.FontFamily>LexendSemiBold</Label.FontFamily>
             </Label>
             <Button
-                Command="{Binding UserTicketNextPageCommand}"
+                Command="{Binding NextPageCommand}"
+                CommandParameter="{x:Static viewModel:TicketPageType.User}"
                 Text="Next Page"
                 TextColor="{StaticResource PrimaryLight}"
                 FontSize="18"
@@ -303,6 +309,7 @@
 
         <RefreshView
             Grid.Row="5"
+            HeightRequest="300"
             IsVisible="{Binding IsAdmin}"
             IsRefreshing="{Binding IsRefreshing}"
             Command="{Binding RefreshCommand}">
@@ -347,7 +354,8 @@
             HorizontalOptions="End"
             IsVisible="{Binding IsAdmin}">
             <Button
-                Command="{Binding UnassignedPreviousPageCommand}"
+                Command="{Binding PreviousPageCommand}"
+                CommandParameter="{x:Static viewModel:TicketPageType.Unassigned}"
                 Text="Previous Page"
                 TextColor="{StaticResource PrimaryLight}"
                 FontSize="18"
@@ -375,7 +383,8 @@
                 <Label.FontFamily>LexendSemiBold</Label.FontFamily>
             </Label>
             <Button
-                Command="{Binding UnassignedNextPageCommand}"
+                Command="{Binding NextPageCommand}"
+                CommandParameter="{x:Static viewModel:TicketPageType.Unassigned}"
                 Text="Next Page"
                 TextColor="{StaticResource PrimaryLight}"
                 FontSize="18"
