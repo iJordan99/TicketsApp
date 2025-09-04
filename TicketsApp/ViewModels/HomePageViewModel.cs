@@ -122,6 +122,12 @@ public partial class HomePageViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task CreateTicket()
+    {
+        await Shell.Current.GoToAsync(nameof(CreateTicketPage));
+    }
+
+    [RelayCommand]
     private async Task LoadUserTickets(int page)
     {
         var reqParams = new TicketQueryParameters

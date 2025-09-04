@@ -26,91 +26,91 @@
                         <Label Text="{Binding TicketData, Converter={StaticResource TicketFormatConverter}}"
                                TextColor="{Binding TicketData.Priority, Converter={StaticResource PriorityToColorConverter}}"
                                VerticalTextAlignment="Center"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendBold" />
 
                         <Label Text="{Binding TicketData.Description}"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
                                TextColor="#1A2D42"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendLight" />
 
                         <Label Text="Reproduction Step"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
                                TextColor="{StaticResource Primary}"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendBold" />
 
                         <Label Text="{Binding TicketData.ReproductionStep}"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
                                TextColor="#1A2D42"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendLight" />
 
                         <Label Text="Error Code"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
                                TextColor="{StaticResource Primary}"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendBold" />
 
                         <Label Text="{Binding TicketData.ErrorCode}"
                                Margin="0,5,0,0"
                                TextColor="#1A2D42"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendLight" />
 
                         <Label Text="Created"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
                                TextColor="{StaticResource Primary}"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendBold" />
 
                         <Label Text="{Binding TicketData.CreatedOn}"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
                                TextColor="#1A2D42"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendLight" />
 
                         <Label Text="Last Updated"
                                TextColor="{StaticResource Primary}"
                                Margin="0,5,0,0"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendBold" />
 
                         <Label Text="{Binding TicketData.UpdatedOn}"
                                VerticalTextAlignment="Center"
                                Margin="0,5,0,0"
                                TextColor="#1A2D42"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendLight" />
 
                         <VerticalStackLayout Spacing="15">
                             <Label Text="Author"
-                                   FontSize="20"
+                                   FontSize="21"
                                    FontFamily="LexendBold"
                                    TextColor="{StaticResource Primary}" />
 
                             <HorizontalStackLayout Spacing="15">
                                 <Label Text="{Binding TicketData.Author.Name}"
-                                       FontSize="20"
+                                       FontSize="21"
                                        FontFamily="LexendLight"
                                        TextColor="#1A2D42" />
 
                                 <Label Text="{Binding TicketData.Author.Email}"
-                                       FontSize="20"
+                                       FontSize="21"
                                        FontFamily="LexendLight"
                                        TextColor="#1A2D42" />
                             </HorizontalStackLayout>
 
                             <Label
                                 Text="{Binding TicketData.Engineers.Count, StringFormat='Assigned Engineers [ {0} ]'}"
-                                FontSize="20"
+                                FontSize="21"
                                 FontFamily="LexendBold"
                                 TextColor="{StaticResource Primary}" />
 
@@ -130,7 +130,7 @@
                                                     <Label Text="{Binding Name}"
                                                            TextColor="{StaticResource Primary}"
                                                            VerticalTextAlignment="Center"
-                                                           FontSize="20"
+                                                           FontSize="21"
                                                            FontFamily="LexendRegular" />
 
                                                     <Button
@@ -163,7 +163,7 @@
                 <Label Text="Comments"
                        Margin="5,10,0,0"
                        TextColor="{StaticResource Primary}"
-                       FontSize="20"
+                       FontSize="21"
                        FontFamily="LexendLight" />
 
                 <Border HorizontalOptions="FillAndExpand"
@@ -201,12 +201,12 @@
                                                              Spacing="5"
                                                              Margin="5,0,0,0">
                                             <Label Text="{Binding User.Name}"
-                                                   FontSize="20"
+                                                   FontSize="21"
                                                    FontFamily="LexendBold"
                                                    TextColor="{Binding User, Converter={StaticResource EngineerToColourConverter}}"
                                                    VerticalTextAlignment="Center" />
                                             <Label Text="{Binding Date, StringFormat='{0:MMM d, yyyy - h:mm tt}'}"
-                                                   FontSize="20"
+                                                   FontSize="21"
                                                    FontFamily="LexendLight"
                                                    TextColor="{StaticResource PrimaryLight}"
                                                    VerticalTextAlignment="Center" />
@@ -214,7 +214,7 @@
                                         <Label Grid.Row="1"
                                                Grid.Column="1"
                                                Text="{Binding Text}"
-                                               FontSize="20"
+                                               FontSize="21"
                                                FontFamily="LexendLight"
                                                TextColor="#1A2D42"
                                                VerticalTextAlignment="Start"
@@ -250,7 +250,7 @@
                 <Label Text="Assign Engineer"
                        Margin="5,10,0,0"
                        TextColor="{StaticResource Primary}"
-                       FontSize="20"
+                       FontSize="21"
                        FontFamily="LexendLight"
                        IsVisible="{Binding IsEngineer}" />
 
@@ -276,7 +276,7 @@
                                             <Label Text="{Binding Name}"
                                                    TextColor="{StaticResource Primary}"
                                                    VerticalTextAlignment="Center"
-                                                   FontSize="20"
+                                                   FontSize="21"
                                                    FontFamily="LexendRegular" />
 
                                             <Button
@@ -292,7 +292,7 @@
                                         <Label Text="{Binding Email}"
                                                VerticalTextAlignment="Center"
                                                TextColor="{StaticResource PrimaryDark}"
-                                               FontSize="20"
+                                               FontSize="21"
                                                FontFamily="LexendThin"
                                                MaxLines="3" />
 
@@ -315,7 +315,7 @@
                         <Label Text="Priority :"
                                Margin="5,10,0,0"
                                TextColor="{StaticResource Primary}"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendLight" />
 
                         <Button
@@ -359,7 +359,7 @@
                         <Label Text="Status :"
                                Margin="5,10,0,0"
                                TextColor="{StaticResource Primary}"
-                               FontSize="20"
+                               FontSize="21"
                                FontFamily="LexendLight" />
 
                         <Button
