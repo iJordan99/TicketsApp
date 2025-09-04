@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TicketsApp.Views.HomePage"
              xmlns:viewModel="clr-namespace:TicketsApp.ViewModels"
+             xmlns:model="clr-namespace:TicketsApp.Models"
              x:DataType="viewModel:HomePageViewModel"
              BackgroundColor="#CFD9E4"
-             Shell.BackgroundColor="#CFD9E4"
-             xmlns:model="clr-namespace:TicketsApp.Models">
+             Shell.BackgroundColor="#CFD9E4">
     <ContentPage.Resources>
         <ResourceDictionary />
     </ContentPage.Resources>
@@ -14,6 +14,15 @@
         RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
         Margin="30,0,30,0"
         RowSpacing="20">
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           Color="{StaticResource Primary}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Grid.RowSpan="7" />
+
+
         <Grid Grid.Row="0" Margin="0,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -76,7 +85,7 @@
                     FontFamily="LexendRegular"
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="White"
-                    IsVisible="{Binding IsNotEngineer}" />
+                    Command="{Binding CreateTicketCommand}" />
         </HorizontalStackLayout>
 
 

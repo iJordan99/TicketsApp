@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TicketsApp.Interfaces;
@@ -7,66 +8,111 @@ using TicketsApp.Views;
 
 namespace TicketsApp.ViewModels;
 
-public partial class TicketDetailsViewModel(
-    IAppState appState,
-    ITicketParser ticketParser,
-    IErrorParser errorParser,
-    IUserParser userParser,
-    ITicketService ticketService,
-    IEngineerService engineerService,
-    IEngineerTicketService engineerTicketService)
-    : BaseViewModel(appState), IQueryAttributable
+public partial class TicketDetailsViewModel : BaseViewModel, IQueryAttributable
 {
-    [ObservableProperty] private ObservableCollection<User> _engineers;
-    [ObservableProperty] private bool? _isEngineer;
+    private readonly IEngineerService _engineerService;
+    private readonly IEngineerTicketService _engineerTicketService;
+    private readonly IErrorParser _errorParser;
 
-    [ObservableProperty] private bool _isLoading;
+    private readonly ITicketParser _ticketParser;
+    private readonly ITicketService _ticketService;
+    private readonly IUserParser _userParser;
+    [ObservableProperty] private ObservableCollection<User> _engineers = new();
+    [ObservableProperty] private bool? _isEngineer;
     [ObservableProperty] private bool? _isNotEngineer;
     [ObservableProperty] private bool _isRefreshing;
-    private Dictionary<string, object> _navigationParameters;
-    [ObservableProperty] private string _newComment;
-    [ObservableProperty] private User? _selectedEngineer;
+    private Dictionary<string, object> _navigationParameters = new();
+    [ObservableProperty] private string _newComment = string.Empty;
     [ObservableProperty] private Ticket? _ticket;
     [ObservableProperty] private TicketWithIncludes? _ticketData;
 
+    public TicketDetailsViewModel(
+        IAppState appState,
+        ITicketParser ticketParser,
+        IErrorParser errorParser,
+        IUserParser userParser,
+        ITicketService ticketService,
+        IEngineerService engineerService,
+        IEngineerTicketService engineerTicketService) : base(appState)
+    {
+        _ticketParser = ticketParser;
+        _errorParser = errorParser;
+        _userParser = userParser;
+        _ticketService = ticketService;
+        _engineerService = engineerService;
+        _engineerTicketService = engineerTicketService;
+    }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        Ticket = query["ticket"] as Ticket;
-        IsEngineer = query["isEngineer"] as bool?;
-        IsNotEngineer = !IsEngineer;
-        LoadDataAsync();
+        if (query == null) return;
+
+        if (query.TryGetValue("ticket", out var ticketValue))
+            Ticket = ticketValue as Ticket;
+
+        if (query.TryGetValue("isEngineer", out var engineerValue))
+        {
+            IsEngineer = engineerValue as bool?;
+            IsNotEngineer = !(IsEngineer ?? false);
+        }
     }
 
-    private async void LoadDataAsync()
+    public async Task InitializeAsync()
     {
-        var engineers = await engineerService.GetEngineers();
-        Engineers = await userParser.ParseMany(engineers);
-        await GetTicketData();
-        _navigationParameters = new Dictionary<string, object> { { "refresh", true } };
+        try
+        {
+            await LoadDataAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Initialization error: {ex.Message}");
+        }
+    }
+
+    private async Task LoadDataAsync()
+    {
+        try
+        {
+            var engineers = await _engineerService.GetEngineers();
+            Engineers = await _userParser.ParseMany(engineers);
+            await GetTicketData();
+            _navigationParameters = new Dictionary<string, object> { { "refresh", true } };
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"LoadDataAsync error: {ex.Message}");
+        }
     }
 
     [RelayCommand]
     private async Task GetTicketData()
     {
-        var includes = "comment,author,engineer";
-        if (Ticket != null)
-            TicketData =
-                await ticketParser.ParseTicketWithIncludes(await ticketService.GetTicketWithIncludes(Ticket, includes));
-        ;
+        try
+        {
+            var includes = "comment,author,engineer";
+            if (Ticket != null)
+                TicketData =
+                    await _ticketParser.ParseTicketWithIncludes(
+                        await _ticketService.GetTicketWithIncludes(Ticket, includes));
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"GetTicketData error: {ex.Message}");
+        }
     }
 
     [RelayCommand]
     private async Task AddComment()
     {
-        if (Ticket == null)
+        if (Ticket == null || string.IsNullOrWhiteSpace(NewComment))
             return;
 
-        var result = await ticketService.AddComment(NewComment, Ticket);
+        var result = await _ticketService.AddComment(NewComment, Ticket);
 
         if (!result.IsSuccessStatusCode)
         {
-            var errors = await errorParser.Parse(result);
+            var errors = await _errorParser.Parse(result);
+            return;
         }
 
         NewComment = string.Empty;
@@ -78,51 +124,74 @@ public partial class TicketDetailsViewModel(
     {
         IsRefreshing = true;
 
-        await GetTicketData();
-
-        IsRefreshing = false;
+        try
+        {
+            await GetTicketData();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"RefreshAsync error: {ex.Message}");
+        }
+        finally
+        {
+            IsRefreshing = false;
+        }
     }
 
     [RelayCommand]
     private async Task AssignEngineer(User engineer)
     {
-        var response = await engineerTicketService.AssignEngineer(Ticket, engineer);
+        if (Ticket == null || engineer == null) return;
 
-        if (response.IsSuccessStatusCode) await RefreshAsync();
+        var response = await _engineerTicketService.AssignEngineer(Ticket, engineer);
+
+        if (response.IsSuccessStatusCode)
+            await RefreshAsync();
     }
 
     [RelayCommand]
     private async Task RemoveEngineer(User engineer)
     {
-        var remove = await engineerTicketService.RemoveEngineer(Ticket, engineer);
+        if (Ticket == null || engineer == null) return;
 
-        if (remove.IsSuccessStatusCode) await RefreshAsync();
+        var remove = await _engineerTicketService.RemoveEngineer(Ticket, engineer);
+
+        if (remove.IsSuccessStatusCode)
+            await RefreshAsync();
     }
 
     [RelayCommand]
     private async Task UpdatePriority(string priority)
     {
+        if (Ticket == null || string.IsNullOrWhiteSpace(priority)) return;
+
         var data = new[] { (Key: "priority", Value: priority) };
 
-        var updated = await ticketService.UpdateTicket(Ticket, AppState.CurrentUser, data);
+        var updated = await _ticketService.UpdateTicket(Ticket, AppState.CurrentUser, data);
 
-        if (updated.IsSuccessStatusCode) await RefreshAsync();
+        if (updated.IsSuccessStatusCode)
+            await RefreshAsync();
     }
 
     [RelayCommand]
     private async Task UpdateStatus(string status)
     {
+        if (Ticket == null || string.IsNullOrWhiteSpace(status)) return;
+
         var data = new[] { (Key: "status", Value: status) };
 
-        var updated = await ticketService.UpdateTicket(Ticket, AppState.CurrentUser, data);
+        var updated = await _ticketService.UpdateTicket(Ticket, AppState.CurrentUser, data);
 
-        if (updated.IsSuccessStatusCode) await RefreshAsync();
+        if (updated.IsSuccessStatusCode)
+            await RefreshAsync();
     }
 
     [RelayCommand]
     private async Task DeleteTicket(Ticket ticket)
     {
-        var deleted = await ticketService.DeleteTicket(ticket);
+        if (ticket == null) return;
+
+        var deleted = await _ticketService.DeleteTicket(ticket);
         if (deleted.IsSuccessStatusCode)
             await Shell.Current.GoToAsync($"///{nameof(HomePage)}", true, _navigationParameters);
     }

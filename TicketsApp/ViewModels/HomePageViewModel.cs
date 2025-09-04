@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TicketsApp.Interfaces;
@@ -7,7 +8,7 @@ using TicketsApp.Views;
 
 namespace TicketsApp.ViewModels;
 
-public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
+public partial class HomePageViewModel : BaseViewModel
 {
     private const int FirstPage = 1;
 
@@ -22,6 +23,8 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
     [ObservableProperty] private int _assignedTotalPages;
 
     [ObservableProperty] private bool? _isAdmin;
+
+    [ObservableProperty] private bool _isBusy;
     [ObservableProperty] private bool? _isEngineer;
     [ObservableProperty] private bool? _isNotEngineer;
     [ObservableProperty] private bool? _isRefreshing;
@@ -47,22 +50,27 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
         _ticketParser = ticketParser;
         _metaParser = metaParser;
 
-
         Username = AppState.CurrentUser?.Name;
         IsEngineer = AppState.CurrentUser?.IsEngineer ?? false;
         IsAdmin = AppState.CurrentUser?.IsAdmin;
-        IsNotEngineer = !IsEngineer;
+        IsNotEngineer = !(IsEngineer ?? false);
 
         AssignedCurrentPage = FirstPage;
         UnassignedCurrentPage = FirstPage;
         UserTicketCurrentPage = FirstPage;
-
-        _ = LoadTickets();
     }
 
-    public async void ApplyQueryAttributes(IDictionary<string, object> query)
+    public async Task InitializeAsync()
     {
-        if (query.ContainsKey("refresh") && query["refresh"] is bool refresh && refresh) await RefreshAsync();
+        IsBusy = true;
+        try
+        {
+            await LoadTickets();
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
@@ -70,8 +78,10 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
     {
         if (IsEngineer ?? false)
         {
-            await LoadAssignedTickets(FirstPage);
-            await LoadUnAssignedTickets(FirstPage);
+            var assignedTask = LoadAssignedTickets(FirstPage);
+            var unassignedTask = LoadUnassignedTickets(FirstPage);
+
+            await Task.WhenAll(assignedTask, unassignedTask);
             return;
         }
 
@@ -86,6 +96,10 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
         {
             await LoadTickets();
         }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error refreshing tickets: {ex.Message}");
+        }
         finally
         {
             IsRefreshing = false;
@@ -95,13 +109,13 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
     [RelayCommand]
     private async Task TicketDetails(Ticket ticket)
     {
-        if (ticket is null)
+        if (ticket == null)
             return;
 
         var navigationParameters = new Dictionary<string, object>
         {
             { "ticket", ticket },
-            { "isEngineer", _isEngineer }
+            { "isEngineer", IsEngineer ?? false }
         };
 
         await Shell.Current.GoToAsync(nameof(TicketDetailsPage), true, navigationParameters);
@@ -117,11 +131,11 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
         var response = await _ticketService.GetTickets(reqParams);
         UserTickets = await _ticketParser.ParseTickets(response);
 
-
         var meta = await _metaParser.Parse(response);
-        UserTicketTotalPages = meta.Total;
+        UserTicketTotalPages = meta?.Total ?? 0;
         UserTicketLastPage = meta?.LastPage ?? FirstPage;
     }
+
 
     [RelayCommand]
     private async Task UserTicketPreviousPage()
@@ -149,8 +163,7 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
         AssignedTickets = await _ticketParser.ParseTickets(response);
 
         var meta = await _metaParser.Parse(response);
-
-        AssignedTotalPages = meta.Total;
+        AssignedTotalPages = meta?.Total ?? 0;
         AssignedLastPage = meta?.LastPage ?? FirstPage;
     }
 
@@ -174,8 +187,7 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
         await LoadAssignedTickets(AssignedCurrentPage);
     }
 
-
-    private async Task LoadUnAssignedTickets(int page)
+    private async Task LoadUnassignedTickets(int page)
     {
         var requestParams = new TicketQueryParameters
         {
@@ -187,8 +199,7 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
         UnassignedTickets = await _ticketParser.ParseTickets(response);
 
         var meta = await _metaParser.Parse(response);
-
-        UnassignedTotalPages = meta.Total;
+        UnassignedTotalPages = meta?.Total ?? 0;
         UnassignedLastPage = meta?.LastPage ?? FirstPage;
     }
 
@@ -199,7 +210,7 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
             return;
 
         UnassignedCurrentPage += 1;
-        await LoadUnAssignedTickets(UnassignedCurrentPage);
+        await LoadUnassignedTickets(UnassignedCurrentPage);
     }
 
     [RelayCommand]
@@ -209,6 +220,12 @@ public partial class HomePageViewModel : BaseViewModel, IQueryAttributable
             return;
 
         UnassignedCurrentPage -= 1;
-        await LoadUnAssignedTickets(UnassignedCurrentPage);
+        await LoadUnassignedTickets(UnassignedCurrentPage);
+    }
+
+    [RelayCommand]
+    private async Task CreateTicket()
+    {
+        await Shell.Current.GoToAsync(nameof(CreateTicketPage));
     }
 }
