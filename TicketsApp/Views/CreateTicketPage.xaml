@@ -1,0 +1,88 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TicketsApp.Views.CreateTicketPage"
+             xmlns:viewModel="clr-namespace:TicketsApp.ViewModels"
+             x:DataType="viewModel:CreateTicketPageViewModel"
+             BackgroundColor="#CFD9E4"
+             Shell.BackgroundColor="#CFD9E4">
+    <ContentPage.Resources>
+        <ResourceDictionary />
+    </ContentPage.Resources>
+
+
+    <VerticalStackLayout Padding="20"
+                         Spacing="10">
+
+        <Label Text="Title"
+               TextColor="{StaticResource Primary}"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendRegular" />
+
+        <Entry Placeholder="Title"
+               Text="{Binding Title}"
+               PlaceholderColor="{StaticResource PrimaryLight}"
+               TextColor="{StaticResource Primary}"
+               BackgroundColor="White"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendThin" />
+
+        <Label Text="Description"
+               TextColor="{StaticResource Primary}"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendRegular" />
+
+        <Editor Placeholder="Description of the issue you're facing"
+                Text="{Binding Description}"
+                HeightRequest="200"
+                PlaceholderColor="{StaticResource PrimaryLight}"
+                TextColor="{StaticResource Primary}"
+                BackgroundColor="White"
+                FontSize="21"
+                FontFamily="LexendThin" />
+
+        <Label Text="Reproduction Steps"
+               TextColor="{StaticResource Primary}"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendRegular" />
+
+        <Editor Placeholder="What process causes it to happen?"
+                Text="{Binding Reproduction}"
+                HeightRequest="200"
+                PlaceholderColor="{StaticResource PrimaryLight}"
+                TextColor="{StaticResource Primary}"
+                BackgroundColor="White"
+                FontSize="21"
+                FontFamily="LexendThin" />
+
+        <Label Text="Error Codes"
+               TextColor="{StaticResource Primary}"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendRegular" />
+
+        <Entry Placeholder="Are there any error codes being displayed?"
+               Text="{Binding Error}"
+               PlaceholderColor="{StaticResource PrimaryLight}"
+               TextColor="{StaticResource Primary}"
+               BackgroundColor="White"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendThin"
+               ClearButtonVisibility="WhileEditing" />
+
+        <Button
+            Text="Create"
+            BackgroundColor="Green"
+            TextColor="White"
+            Margin="0,5,0,0"
+            FontSize="18"
+            FontFamily="LexendRegular"
+            Command="{Binding CreateTicketCommand}" />
+
+    </VerticalStackLayout>
+
+</ContentPage>

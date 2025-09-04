@@ -88,4 +88,39 @@ public class TicketService(
     {
         return await httpClient.DeleteAsync(TicketApiRoutes.BaseTicket(ticket));
     }
+
+    public async Task<HttpResponseMessage> CreateTicket(Ticket ticket, User user)
+    {
+        var payload = new
+        {
+            data = new
+            {
+                attributes = new
+                {
+                    title = ticket.Title,
+                    description = ticket.Description,
+                    priority = ticket.Priority,
+                    type = ticket.Type,
+                    status = ticket.Status,
+                    errorCode = ticket.ErrorCode,
+                    reproductionStep = ticket.ReproductionStep
+                },
+                relationships = new
+                {
+                    author = new
+                    {
+                        data = new
+                        {
+                            id = user.Id
+                        }
+                    }
+                }
+            }
+        };
+
+        var jsonPayload = JsonSerializer.Serialize(payload, serializerOptions);
+        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+        return await httpClient.PostAsync("https://tickets.test/api/v1/tickets", content);
+    }
 }
