@@ -3,12 +3,21 @@ using TicketsApp.Interfaces;
 
 namespace TicketsApp.ViewModels;
 
-public class BaseViewModel : ObservableObject
+public partial class BaseViewModel : ObservableObject
 {
     protected readonly IAppState AppState;
-    
+
+    [ObservableProperty] private bool? _isAdmin;
+    [ObservableProperty] private bool? _isEngineer;
+    [ObservableProperty] private bool? _isNotEngineer;
+    [ObservableProperty] private string? _username;
+
     protected BaseViewModel(IAppState appState)
     {
-        this.AppState = appState;
-    } 
+        AppState = appState;
+        IsEngineer = AppState.CurrentUser?.IsEngineer ?? false;
+        IsNotEngineer = !(IsEngineer ?? false);
+        IsAdmin = AppState.CurrentUser?.IsAdmin;
+        Username = AppState.CurrentUser?.Name;
+    }
 }
