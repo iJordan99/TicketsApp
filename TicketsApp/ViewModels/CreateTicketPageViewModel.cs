@@ -74,7 +74,7 @@ public partial class CreateTicketPageViewModel : BaseViewModel
                     response = await _ticketService.CreateTicket(ticket, AppState.CurrentUser);
                     break;
                 case true:
-                    response = await _authorService.CreateTicket(ticket, SelectedAuthor);
+                    response = await _ticketService.CreateTicket(ticket, SelectedAuthor);
                     error = await _postApiResponseService.ProcessResponse(response);
                     break;
             }

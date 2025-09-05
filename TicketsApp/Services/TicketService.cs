@@ -92,30 +92,31 @@ public class TicketService(
 
     public async Task<HttpResponseMessage> CreateTicket(Ticket ticket, User user)
     {
+        var attributes = new Dictionary<string, object>
+        {
+            { "title", ticket.Title },
+            { "description", ticket.Description },
+            { "priority", ticket.Priority },
+            { "type", ticket.Type },
+            { "status", ticket.Status }
+        };
+
+        if (!string.IsNullOrEmpty(ticket.ErrorCode)) attributes.Add("error_code", ticket.ErrorCode);
+
+        if (!string.IsNullOrEmpty(ticket.ReproductionStep))
+            attributes.Add("reproduction_step", ticket.ReproductionStep);
+
+        var relationships = new Dictionary<string, object>
+        {
+            { "author", new { data = new { id = user.Id } } }
+        };
+
         var payload = new
         {
             data = new
             {
-                attributes = new
-                {
-                    title = ticket.Title,
-                    description = ticket.Description,
-                    priority = ticket.Priority,
-                    type = ticket.Type,
-                    status = ticket.Status,
-                    error_code = ticket.ErrorCode,
-                    reproduction_step = ticket.ReproductionStep
-                },
-                relationships = new
-                {
-                    author = new
-                    {
-                        data = new
-                        {
-                            id = user.Id
-                        }
-                    }
-                }
+                attributes,
+                relationships
             }
         };
 
