@@ -42,9 +42,10 @@ public class TicketService(
 
     public async Task<HttpResponseMessage> GetTickets(TicketQueryParameter? parameters)
     {
-        var baseUri = "https://tickets.test/api/v1/tickets";
         var queryString = queryStringBuilder.BuildQueryString(parameters);
-        var uri = string.IsNullOrEmpty(queryString) ? baseUri : $"{baseUri}?{queryString}";
+        var uri = string.IsNullOrEmpty(queryString)
+            ? TicketApiRoutes.BaseTicket()
+            : $"{TicketApiRoutes.BaseTicket()}?{queryString}";
 
         return await httpClient.GetAsync(uri);
     }

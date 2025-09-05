@@ -9,4 +9,8 @@ public class TicketQueryParameter
     public bool? Assigned { get; init; }
 
     public int? Page { get; init; }
+
+    public int? Engineer { get; init; }
+
+    public int? Author { get; init; }
 }

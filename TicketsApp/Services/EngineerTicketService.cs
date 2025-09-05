@@ -36,9 +36,4 @@ public class EngineerTicketService(
     {
         return httpClient.DeleteAsync(EngineerTicketApiRoutes.RemoveEngineer(ticket, engineer));
     }
-
-    public async Task<HttpResponseMessage> GetTickets(int? page)
-    {
-        return await httpClient.GetAsync(EngineerTicketApiRoutes.EngineerAssignedTickets(page));
-    }
 }

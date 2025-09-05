@@ -136,7 +136,14 @@ public partial class HomePageViewModel : BaseViewModel
 
     private async Task LoadAssignedTickets(int page)
     {
-        var response = await _engineerTicketService.GetTickets(page);
+        var requestParams = new TicketQueryParameter
+        {
+            Engineer = AppState.CurrentUser?.Id,
+            Assigned = true,
+            Page = page
+        };
+
+        var response = await _ticketService.GetTickets(requestParams);
         AssignedTickets = await _ticketParser.ParseTickets(response);
 
         var meta = await _metaParser.Parse(response);
