@@ -3,6 +3,7 @@
              x:Class="TicketsApp.Views.CreateTicketPage"
              xmlns:viewModel="clr-namespace:TicketsApp.ViewModels"
              x:DataType="viewModel:CreateTicketPageViewModel"
+             xmlns:model="clr-namespace:TicketsApp.Models"
              BackgroundColor="#CFD9E4"
              Shell.BackgroundColor="#CFD9E4">
     <ContentPage.Resources>
@@ -73,6 +74,163 @@
                FontSize="21"
                FontFamily="LexendThin"
                ClearButtonVisibility="WhileEditing" />
+
+
+        <Label Text="Type"
+               TextColor="{StaticResource Primary}"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendRegular"
+               IsVisible="{Binding IsEngineer}" />
+
+
+        <Entry Placeholder="Ticket type"
+               Text="{Binding Type}"
+               PlaceholderColor="{StaticResource PrimaryLight}"
+               TextColor="{StaticResource Primary}"
+               BackgroundColor="White"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendThin"
+               ClearButtonVisibility="WhileEditing"
+               IsVisible="{Binding IsEngineer}" />
+
+        <Label Text="Status"
+               TextColor="{StaticResource Primary}"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendRegular"
+               IsVisible="{Binding IsEngineer}" />
+
+
+        <Entry Placeholder="Ticket status"
+               Text="{Binding Status}"
+               PlaceholderColor="{StaticResource PrimaryLight}"
+               TextColor="{StaticResource Primary}"
+               BackgroundColor="White"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendThin"
+               ClearButtonVisibility="WhileEditing"
+               IsVisible="{Binding IsEngineer}" />
+
+        <Label Text="Priority"
+               TextColor="{StaticResource Primary}"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendRegular"
+               IsVisible="{Binding IsEngineer}" />
+
+
+        <Entry Placeholder="Priority level"
+               Text="{Binding Priority}"
+               PlaceholderColor="{StaticResource PrimaryLight}"
+               TextColor="{StaticResource Primary}"
+               BackgroundColor="White"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendThin"
+               ClearButtonVisibility="WhileEditing"
+               IsVisible="{Binding IsEngineer}" />
+
+
+        <Label Text="Author"
+               TextColor="{StaticResource Primary}"
+               VerticalTextAlignment="Center"
+               FontSize="21"
+               FontFamily="LexendRegular"
+               IsVisible="{Binding IsEngineer}" />
+
+        <SearchBar Placeholder="Search Authors..."
+                   BackgroundColor="White"
+                   PlaceholderColor="Black"
+                   TextColor="Black"
+                   FontSize="21"
+                   Text="{Binding SearchTerm, Mode=TwoWay}"
+                   SearchCommand="{Binding SearchAuthorsCommand}"
+                   IsVisible="{Binding IsEngineer}" />
+
+        <VerticalStackLayout Spacing="10"
+                             IsVisible="{Binding IsEngineer}">
+            <CollectionView ItemsSource="{Binding SearchedAuthors}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedAuthor}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="4"
+                                     HorizontalItemSpacing="15"
+                                     VerticalItemSpacing="15" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:User}">
+                        <Border HorizontalOptions="FillAndExpand"
+                                Padding="10"
+                                HeightRequest="100"
+                                BackgroundColor="White">
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="White" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="[Engineer]"
+                                           VerticalTextAlignment="Center"
+                                           Margin="0,10,0,0"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="21"
+                                           FontFamily="LexendBold"
+                                           MaxLines="3"
+                                           LineBreakMode="TailTruncation"
+                                           IsVisible="{Binding IsEngineer}" />
+
+                                    <Label Text="[Admin]"
+                                           VerticalTextAlignment="Center"
+                                           Margin="0,10,0,0"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="21"
+                                           FontFamily="LexendBold"
+                                           MaxLines="3"
+                                           LineBreakMode="TailTruncation"
+                                           IsVisible="{Binding IsEngineer}" />
+
+                                    <Label Text="{Binding Name}"
+                                           VerticalTextAlignment="Center"
+                                           Margin="0,10,0,0"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="21"
+                                           FontFamily="LexendBold"
+                                           MaxLines="3"
+                                           LineBreakMode="TailTruncation" />
+
+                                </HorizontalStackLayout>
+
+                                <Label Text="{Binding Email}"
+                                       VerticalTextAlignment="Center"
+                                       Margin="0,10,0,0"
+                                       TextColor="{StaticResource PrimaryLight}"
+                                       FontSize="21"
+                                       FontFamily="LexendLight"
+                                       MaxLines="3"
+                                       LineBreakMode="TailTruncation" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
 
         <Button
             Text="Create"

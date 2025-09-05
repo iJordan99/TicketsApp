@@ -40,7 +40,7 @@ public class TicketService(
         return await httpClient.PostAsync(TicketApiRoutes.AddComment(ticket), content);
     }
 
-    public async Task<HttpResponseMessage> GetTickets(TicketQueryParameters? parameters)
+    public async Task<HttpResponseMessage> GetTickets(TicketQueryParameter? parameters)
     {
         var baseUri = "https://tickets.test/api/v1/tickets";
         var queryString = queryStringBuilder.BuildQueryString(parameters);
@@ -81,12 +81,12 @@ public class TicketService(
         var jsonPayload = JsonSerializer.Serialize(payload, serializerOptions);
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-        return await httpClient.PatchAsync(TicketApiRoutes.BaseTicket(ticket), content);
+        return await httpClient.PatchAsync(TicketApiRoutes.TicketById(ticket), content);
     }
 
     public async Task<HttpResponseMessage> DeleteTicket(Ticket ticket)
     {
-        return await httpClient.DeleteAsync(TicketApiRoutes.BaseTicket(ticket));
+        return await httpClient.DeleteAsync(TicketApiRoutes.TicketById(ticket));
     }
 
     public async Task<HttpResponseMessage> CreateTicket(Ticket ticket, User user)
@@ -102,8 +102,8 @@ public class TicketService(
                     priority = ticket.Priority,
                     type = ticket.Type,
                     status = ticket.Status,
-                    errorCode = ticket.ErrorCode,
-                    reproductionStep = ticket.ReproductionStep
+                    error_code = ticket.ErrorCode,
+                    reproduction_step = ticket.ReproductionStep
                 },
                 relationships = new
                 {
@@ -121,6 +121,6 @@ public class TicketService(
         var jsonPayload = JsonSerializer.Serialize(payload, serializerOptions);
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-        return await httpClient.PostAsync("https://tickets.test/api/v1/tickets", content);
+        return await httpClient.PostAsync(TicketApiRoutes.BaseTicket(), content);
     }
 }

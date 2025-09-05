@@ -14,8 +14,13 @@ public static class TicketApiRoutes
         return $"https://tickets.test/api/v1/tickets/{ticket.Id}/comment";
     }
 
-    public static string? BaseTicket(Ticket ticket)
+    public static string? TicketById(Ticket ticket)
     {
         return $"https://tickets.test/api/v1/tickets/{ticket.Id}";
+    }
+
+    public static string? BaseTicket()
+    {
+        return "https://tickets.test/api/v1/tickets";
     }
 }

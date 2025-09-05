@@ -4,6 +4,7 @@ using System.Text.Json;
 using TicketsApp.Interfaces;
 using TicketsApp.Models;
 using TicketsApp.Utilities;
+
 namespace TicketsApp.Services;
 
 /// <summary>
@@ -13,7 +14,11 @@ namespace TicketsApp.Services;
 ///     This service facilitates the authentication processes by communicating with the authentication API,
 ///     managing serialized data, and integrating user-related state into the application.
 /// </remarks>
-public class AuthService(HttpClient httpClient, JsonSerializerOptions serializerOptions, IAppState appState, IPostApiResponseService postApiResponseService) : IAuthService
+public class AuthService(
+    HttpClient httpClient,
+    JsonSerializerOptions serializerOptions,
+    IAppState appState,
+    IPostApiResponseService postApiResponseService) : IAuthService
 {
     /// <summary>
     ///     Authenticates a user based on the provided login request and initiates user session management.
@@ -29,10 +34,7 @@ public class AuthService(HttpClient httpClient, JsonSerializerOptions serializer
         {
             var apiResponse = await AuthenticateAndSetTokenAsync(loginRequest);
 
-            if (!apiResponse.Success)
-            {
-                return apiResponse.Error;
-            }
+            if (!apiResponse.Success) return apiResponse.Error;
 
             await RetrieveAndSetUserDataAsync();
             return null;
@@ -93,9 +95,7 @@ public class AuthService(HttpClient httpClient, JsonSerializerOptions serializer
 
         if (doc.RootElement.TryGetProperty("data", out var dataElement) &&
             dataElement.TryGetProperty("token", out var tokenElement))
-        {
             return tokenElement.GetString();
-        }
 
         return null;
     }
@@ -120,10 +120,7 @@ public class AuthService(HttpClient httpClient, JsonSerializerOptions serializer
         if (response.IsSuccessStatusCode)
         {
             var user = await ParseUserData(response);
-            if (user != null)
-            {
-                appState.CurrentUser = user;
-            }
+            if (user != null) appState.CurrentUser = user;
         }
     }
 

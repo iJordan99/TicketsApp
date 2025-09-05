@@ -18,8 +18,8 @@ public partial class TicketDetailsViewModel : BaseViewModel, IQueryAttributable
     private readonly ITicketService _ticketService;
     private readonly IUserParser _userParser;
     [ObservableProperty] private ObservableCollection<User> _engineers = new();
-    [ObservableProperty] private bool? _isEngineer;
-    [ObservableProperty] private bool? _isNotEngineer;
+
+
     [ObservableProperty] private bool _isRefreshing;
     private Dictionary<string, object> _navigationParameters = new();
     [ObservableProperty] private string _newComment = string.Empty;
@@ -49,12 +49,6 @@ public partial class TicketDetailsViewModel : BaseViewModel, IQueryAttributable
 
         if (query.TryGetValue("ticket", out var ticketValue))
             Ticket = ticketValue as Ticket;
-
-        if (query.TryGetValue("isEngineer", out var engineerValue))
-        {
-            IsEngineer = engineerValue as bool?;
-            IsNotEngineer = !(IsEngineer ?? false);
-        }
     }
 
     public async Task InitializeAsync()

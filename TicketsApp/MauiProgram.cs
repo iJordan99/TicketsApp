@@ -63,7 +63,7 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddSingleton<IAppState, AppState>();
 
         mauiAppBuilder.Services.AddSingleton<IAuthService, AuthService>();
-
+        mauiAppBuilder.Services.AddSingleton<IAuthorService, AuthorService>();
 
         mauiAppBuilder.Services.AddSingleton<IEngineerTicketService, EngineerTicketService>();
         mauiAppBuilder.Services.AddSingleton<IEngineerService, EngineerService>();

@@ -1,8 +1,6 @@
-using TicketsApp.Models;
-
 namespace TicketsApp.Interfaces;
 
 public interface IQueryStringBuilder
 {
-    string BuildQueryString(TicketQueryParameters parameters);
+    string BuildQueryString<T>(T parameter) where T : class;
 }

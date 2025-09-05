@@ -125,7 +125,7 @@ public partial class HomePageViewModel : BaseViewModel
     [RelayCommand]
     private async Task LoadUserTickets(int page)
     {
-        var reqParams = new TicketQueryParameters { Page = page };
+        var reqParams = new TicketQueryParameter { Page = page };
         var response = await _ticketService.GetTickets(reqParams);
         UserTickets = await _ticketParser.ParseTickets(response);
 
@@ -146,7 +146,7 @@ public partial class HomePageViewModel : BaseViewModel
 
     private async Task LoadUnassignedTickets(int page)
     {
-        var requestParams = new TicketQueryParameters
+        var requestParams = new TicketQueryParameter
         {
             Assigned = false,
             Page = page

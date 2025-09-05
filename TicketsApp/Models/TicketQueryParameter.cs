@@ -1,6 +1,6 @@
 namespace TicketsApp.Models;
 
-public class TicketQueryParameters
+public class TicketQueryParameter
 {
     public string? Sort { get; init; }
     public string? Status { get; init; }

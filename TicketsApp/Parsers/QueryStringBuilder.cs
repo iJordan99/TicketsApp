@@ -1,31 +1,44 @@
+using System.Reflection;
 using TicketsApp.Interfaces;
-using TicketsApp.Models;
 
 namespace TicketsApp.Parsers;
 
 public class QueryStringBuilder : IQueryStringBuilder
 {
-    public string BuildQueryString(TicketQueryParameters parameters)
+    public string BuildQueryString<T>(T? parameter) where T : class
     {
+        if (parameter == null)
+            return string.Empty;
+
         var queryParams = new List<string>();
 
-        if (!string.IsNullOrEmpty(parameters.Sort))
-            queryParams.Add($"sort={Uri.EscapeDataString(parameters.Sort)}");
+        // Get all public properties of the parameter object
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-        if (!string.IsNullOrEmpty(parameters.Status))
-            queryParams.Add($"status={Uri.EscapeDataString(parameters.Status)}");
+        foreach (var prop in properties)
+        {
+            var value = prop.GetValue(parameter);
 
-        if (parameters.Priority.HasValue)
-            queryParams.Add($"priority={parameters.Priority.Value}");
+            if (value == null)
+                continue;
 
-        if (parameters.Include?.Length > 0)
-            queryParams.Add($"include={Uri.EscapeDataString(string.Join(",", parameters.Include))}");
-
-        if (parameters.Assigned.HasValue)
-            queryParams.Add($"assigned={parameters.Assigned.Value.ToString().ToLower()}");
-
-        if (parameters.Page.HasValue)
-            queryParams.Add($"page={parameters.Page.Value}");
+            switch (value)
+            {
+                case string s when !string.IsNullOrEmpty(s):
+                    queryParams.Add($"{prop.Name.ToLower()}={Uri.EscapeDataString(s)}");
+                    break;
+                case bool b:
+                    queryParams.Add($"{prop.Name.ToLower()}={b.ToString().ToLower()}");
+                    break;
+                case Array arr when arr.Length > 0:
+                    queryParams.Add(
+                        $"{prop.Name.ToLower()}={Uri.EscapeDataString(string.Join(",", arr.Cast<object>()))}");
+                    break;
+                default:
+                    queryParams.Add($"{prop.Name.ToLower()}={value}");
+                    break;
+            }
+        }
 
         return string.Join("&", queryParams);
     }
