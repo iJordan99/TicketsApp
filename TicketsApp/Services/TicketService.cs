@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.Json;
 using TicketsApp.Interfaces;
@@ -90,7 +91,8 @@ public class TicketService(
         return await httpClient.DeleteAsync(TicketApiRoutes.TicketById(ticket));
     }
 
-    public async Task<HttpResponseMessage> CreateTicket(Ticket ticket, User user)
+    public async Task<HttpResponseMessage> CreateTicket(Ticket ticket, User user,
+        ObservableCollection<User>? engineers = null)
     {
         var attributes = new Dictionary<string, object>
         {
@@ -110,6 +112,16 @@ public class TicketService(
         {
             { "author", new { data = new { id = user.Id } } }
         };
+
+        if (engineers != null)
+        {
+            var engineerList = engineers.ToList();
+            if (engineerList.Count > 0)
+                relationships["engineer"] = new
+                {
+                    data = engineerList.Select(e => new { id = e.Id }).ToList()
+                };
+        }
 
         var payload = new
         {
