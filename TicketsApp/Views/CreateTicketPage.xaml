@@ -80,20 +80,50 @@
                    TextColor="{StaticResource Primary}"
                    VerticalTextAlignment="Center"
                    FontSize="21"
-                   FontFamily="LexendRegular"
-                   IsVisible="{Binding IsEngineer}" />
+                   FontFamily="LexendRegular" />
 
+            <CollectionView ItemsSource="{Binding TicketTypes}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedTicketType}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="20"
+                                     HorizontalItemSpacing="15"
+                                     VerticalItemSpacing="15" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border Padding="5"
+                                HeightRequest="40"
+                                WidthRequest="60"
+                                BackgroundColor="White">
 
-            <Entry Placeholder="Ticket type"
-                   Text="{Binding Type}"
-                   PlaceholderColor="{StaticResource PrimaryLight}"
-                   TextColor="{StaticResource Primary}"
-                   BackgroundColor="White"
-                   VerticalTextAlignment="Center"
-                   FontSize="21"
-                   FontFamily="LexendThin"
-                   ClearButtonVisibility="WhileEditing"
-                   IsVisible="{Binding IsEngineer}" />
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="White" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <VerticalStackLayout>
+
+                                <Label Text="{Binding .}"
+                                       TextColor="{StaticResource PrimaryLight}"
+                                       FontSize="21"
+                                       FontFamily="LexendLight" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <Label Text="Status"
                    TextColor="{StaticResource Primary}"
@@ -103,16 +133,49 @@
                    IsVisible="{Binding IsEngineer}" />
 
 
-            <Entry Placeholder="Ticket status"
-                   Text="{Binding Status}"
-                   PlaceholderColor="{StaticResource PrimaryLight}"
-                   TextColor="{StaticResource Primary}"
-                   BackgroundColor="White"
-                   VerticalTextAlignment="Center"
-                   FontSize="21"
-                   FontFamily="LexendThin"
-                   ClearButtonVisibility="WhileEditing"
-                   IsVisible="{Binding IsEngineer}" />
+            <CollectionView ItemsSource="{Binding StatusTypeNames}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedStatusType}"
+                            IsVisible="{Binding IsEngineer}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="15"
+                                     HorizontalItemSpacing="15"
+                                     VerticalItemSpacing="15" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border Padding="5"
+                                HeightRequest="40"
+                                WidthRequest="80"
+                                BackgroundColor="White">
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="White" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <VerticalStackLayout>
+
+                                <Label Text="{Binding .}"
+                                       TextColor="{StaticResource PrimaryLight}"
+                                       FontSize="21"
+                                       FontFamily="LexendLight" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <Label Text="Priority"
                    TextColor="{StaticResource Primary}"
@@ -121,17 +184,46 @@
                    FontFamily="LexendRegular"
                    IsVisible="{Binding IsEngineer}" />
 
+            <CollectionView ItemsSource="{Binding PriorityTypes}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedPriority}"
+                            IsVisible="{Binding IsEngineer}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="20"
+                                     HorizontalItemSpacing="15"
+                                     VerticalItemSpacing="15" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border Padding="5"
+                                HeightRequest="40"
+                                WidthRequest="100"
+                                BackgroundColor="White">
 
-            <Entry Placeholder="Priority level"
-                   Text="{Binding Priority}"
-                   PlaceholderColor="{StaticResource PrimaryLight}"
-                   TextColor="{StaticResource Primary}"
-                   BackgroundColor="White"
-                   VerticalTextAlignment="Center"
-                   FontSize="21"
-                   FontFamily="LexendThin"
-                   ClearButtonVisibility="WhileEditing"
-                   IsVisible="{Binding IsEngineer}" />
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="White" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Label Text="{Binding .}"
+                                   TextColor="{StaticResource PrimaryLight}"
+                                   FontSize="21"
+                                   FontFamily="LexendLight" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
 
             <Label Text="Author"
