@@ -14,13 +14,14 @@ public partial class SearchPageViewModel(
 ) : BaseViewModel(appState)
 {
     [ObservableProperty] private ObservableCollection<Ticket> _tickets;
+    [ObservableProperty] private string searchTerm;
 
     [RelayCommand]
-    private async Task SearchTickets(string searchTerm)
+    private async Task SearchTickets()
     {
         var parameter = new TicketQueryParameter
         {
-            Title = searchTerm
+            Title = SearchTerm
         };
 
         var response = await ticketService.GetTickets(parameter);
