@@ -15,6 +15,14 @@ public enum TicketPageType
     User
 }
 
+public enum PriorityFilterType
+{
+    None,
+    Low,
+    Medium,
+    High
+}
+
 public partial class HomePageViewModel : BaseViewModel
 {
     private const int FirstPage = 1;
@@ -31,6 +39,9 @@ public partial class HomePageViewModel : BaseViewModel
 
     [ObservableProperty] private bool _isBusy;
     [ObservableProperty] private bool? _isRefreshing;
+    [ObservableProperty] private string _selectedAssignedPriority;
+
+    [ObservableProperty] private string _selectedUnassignedPriority;
 
     [ObservableProperty] private int _unassignedCurrentPage;
     [ObservableProperty] private int _unassignedLastPage;
@@ -134,13 +145,14 @@ public partial class HomePageViewModel : BaseViewModel
         UserTicketLastPage = meta?.LastPage ?? FirstPage;
     }
 
-    private async Task LoadAssignedTickets(int page)
+    private async Task LoadAssignedTickets(int page, string? priority = null)
     {
         var requestParams = new TicketQueryParameter
         {
             Engineer = AppState.CurrentUser?.Id,
             Assigned = true,
-            Page = page
+            Page = page,
+            Priority = priority
         };
 
         var response = await _ticketService.GetTickets(requestParams);
@@ -151,12 +163,13 @@ public partial class HomePageViewModel : BaseViewModel
         AssignedLastPage = meta?.LastPage ?? FirstPage;
     }
 
-    private async Task LoadUnassignedTickets(int page)
+    private async Task LoadUnassignedTickets(int page, string? priority = null)
     {
         var requestParams = new TicketQueryParameter
         {
             Assigned = false,
-            Page = page
+            Page = page,
+            Priority = priority
         };
 
         var response = await _ticketService.GetTickets(requestParams);
@@ -175,13 +188,13 @@ public partial class HomePageViewModel : BaseViewModel
             case TicketPageType.Assigned:
                 if (AssignedCurrentPage == AssignedLastPage) return;
                 AssignedCurrentPage++;
-                await LoadAssignedTickets(AssignedCurrentPage);
+                await LoadAssignedTickets(AssignedCurrentPage, SelectedAssignedPriority);
                 break;
 
             case TicketPageType.Unassigned:
                 if (UnassignedCurrentPage == UnassignedLastPage) return;
                 UnassignedCurrentPage++;
-                await LoadUnassignedTickets(UnassignedCurrentPage);
+                await LoadUnassignedTickets(UnassignedCurrentPage, SelectedUnassignedPriority);
                 break;
 
             case TicketPageType.User:
@@ -200,13 +213,13 @@ public partial class HomePageViewModel : BaseViewModel
             case TicketPageType.Assigned:
                 if (AssignedCurrentPage == FirstPage) return;
                 AssignedCurrentPage--;
-                await LoadAssignedTickets(AssignedCurrentPage);
+                await LoadAssignedTickets(AssignedCurrentPage, SelectedAssignedPriority);
                 break;
 
             case TicketPageType.Unassigned:
                 if (UnassignedCurrentPage == FirstPage) return;
                 UnassignedCurrentPage--;
-                await LoadUnassignedTickets(UnassignedCurrentPage);
+                await LoadUnassignedTickets(UnassignedCurrentPage, SelectedUnassignedPriority);
                 break;
 
             case TicketPageType.User:
@@ -215,5 +228,23 @@ public partial class HomePageViewModel : BaseViewModel
                 await LoadUserTickets(UserTicketCurrentPage);
                 break;
         }
+    }
+
+    [RelayCommand]
+    private async Task FilterAssignedByPriority(PriorityFilterType type)
+    {
+        SelectedAssignedPriority = type.ToString();
+        AssignedCurrentPage = FirstPage;
+        if (SelectedAssignedPriority == "None") await LoadAssignedTickets(AssignedCurrentPage);
+        await LoadAssignedTickets(AssignedCurrentPage, type.ToString());
+    }
+
+    [RelayCommand]
+    private async Task FilterUnAssignedByPriority(PriorityFilterType type)
+    {
+        SelectedUnassignedPriority = type.ToString();
+        UnassignedCurrentPage = FirstPage;
+        if (SelectedUnassignedPriority == "None") await LoadUnassignedTickets(UnassignedCurrentPage);
+        await LoadUnassignedTickets(UnassignedCurrentPage, type.ToString());
     }
 }

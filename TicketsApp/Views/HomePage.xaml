@@ -24,70 +24,82 @@
 
 
         <Grid Grid.Row="0" Margin="0,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0"
-                   Text="{Binding Username, StringFormat='Welcome {0}'}"
+            <Label Text="{Binding Username, StringFormat='Welcome {0}'}"
                    FontFamily="LexendBold"
                    FontSize="21"
                    TextColor="{StaticResource PrimaryLight}"
                    VerticalTextAlignment="Center"
                    HorizontalOptions="Start" />
+        </Grid>
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="Auto,*"
+              VerticalOptions="Center"
+              Padding="5">
+
+            <HorizontalStackLayout Grid.Column="0"
+                                   Spacing="10"
+                                   VerticalOptions="Center">
+                <Label Text="Assigned Tickets"
+                       FontFamily="LexendLight"
+                       FontSize="21"
+                       TextColor="{StaticResource PrimaryLight}"
+                       VerticalTextAlignment="Center"
+                       IsVisible="{Binding IsEngineer}" />
+
+                <Label Text="Current Tickets"
+                       FontFamily="LexendLight"
+                       FontSize="21"
+                       TextColor="{StaticResource PrimaryLight}"
+                       VerticalTextAlignment="Center"
+                       IsVisible="{Binding IsNotEngineer}" />
+
+                <Button Text="Create"
+                        FontFamily="LexendRegular"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        Command="{Binding CreateTicketCommand}" />
+            </HorizontalStackLayout>
+
             <HorizontalStackLayout Grid.Column="1"
                                    HorizontalOptions="End"
                                    VerticalOptions="Center"
-                                   IsVisible="{Binding IsEngineer}">
-                <Label Text="High Priority"
-                       FontSize="18"
-                       FontFamily="LexendBold"
-                       TextColor="White"
-                       BackgroundColor="Red"
-                       Padding="10"
-                       HorizontalOptions="Center" />
-                <Label Text="Medium Priority"
-                       FontSize="18"
-                       FontFamily="LexendBold"
-                       TextColor="White"
-                       BackgroundColor="DarkOrange"
-                       Padding="10"
-                       HorizontalOptions="Center" />
-                <Label Text="Low Priority"
-                       FontSize="18"
-                       FontFamily="LexendBold"
-                       TextColor="White"
-                       BackgroundColor="Green"
-                       Padding="10"
-                       HorizontalOptions="Center" />
+                                   IsVisible="{Binding IsEngineer}"
+                                   Spacing="5">
+                <Button Text="High Priority"
+                        FontSize="18"
+                        FontFamily="LexendBold"
+                        TextColor="White"
+                        BackgroundColor="Red"
+                        Padding="10"
+                        Command="{Binding FilterAssignedByPriorityCommand}"
+                        CommandParameter="{x:Static viewModel:PriorityFilterType.High}" />
+                <Button Text="Medium Priority"
+                        FontSize="18"
+                        FontFamily="LexendBold"
+                        TextColor="White"
+                        BackgroundColor="DarkOrange"
+                        Padding="10"
+                        Command="{Binding FilterAssignedByPriorityCommand}"
+                        CommandParameter="{x:Static viewModel:PriorityFilterType.Medium}" />
+                <Button Text="Low Priority"
+                        FontSize="18"
+                        FontFamily="LexendBold"
+                        TextColor="White"
+                        BackgroundColor="Green"
+                        Padding="10"
+                        Command="{Binding FilterAssignedByPriorityCommand}"
+                        CommandParameter="{x:Static viewModel:PriorityFilterType.Low}" />
+                <Button Text="Clear"
+                        FontSize="18"
+                        FontFamily="LexendBold"
+                        TextColor="White"
+                        BackgroundColor="Grey"
+                        Padding="10"
+                        Command="{Binding FilterAssignedByPriorityCommand}"
+                        CommandParameter="{x:Static viewModel:PriorityFilterType.None}" />
             </HorizontalStackLayout>
         </Grid>
-
-        <HorizontalStackLayout Grid.Row="1"
-                               Spacing="5">
-            <Label Text="Assigned Tickets"
-                   FontFamily="LexendLight"
-                   FontSize="21"
-                   TextColor="{StaticResource PrimaryLight}"
-                   VerticalTextAlignment="Center"
-                   HorizontalOptions="Start"
-                   IsVisible="{Binding IsEngineer}" />
-
-            <Label Text="Current Tickets"
-                   FontFamily="LexendLight"
-                   FontSize="21"
-                   TextColor="{StaticResource PrimaryLight}"
-                   VerticalTextAlignment="Center"
-                   HorizontalOptions="Start"
-                   IsVisible="{Binding IsNotEngineer}" />
-
-            <Button Text="Create"
-                    FontFamily="LexendRegular"
-                    BackgroundColor="{StaticResource Primary}"
-                    TextColor="White"
-                    Command="{Binding CreateTicketCommand}" />
-        </HorizontalStackLayout>
-
 
         <RefreshView
             HeightRequest="550"
@@ -291,21 +303,70 @@
             </Button>
         </HorizontalStackLayout>
 
-        <Label
-            Grid.Row="4"
-            IsVisible="{Binding IsAdmin}"
-            Text="Unassigned Tickets"
-            FontFamily="LexendLight"
-            FontSize="21"
-            TextColor="{StaticResource PrimaryLight}"
-            VerticalTextAlignment="Center"
-            HorizontalOptions="Start">
-            <Label.Triggers>
-                <DataTrigger TargetType="Label" Binding="{Binding IsAdmin}" Value="False">
-                    <Setter Property="IsVisible" Value="False" />
-                </DataTrigger>
-            </Label.Triggers>
-        </Label>
+        <Grid Grid.Row="4"
+              ColumnDefinitions="Auto,*"
+              VerticalOptions="Center"
+              Padding="5">
+
+            <HorizontalStackLayout Grid.Column="0"
+                                   Spacing="10"
+                                   VerticalOptions="Center">
+                <Label Text="Unassigned Tickets"
+                       FontFamily="LexendLight"
+                       FontSize="21"
+                       TextColor="{StaticResource PrimaryLight}"
+                       VerticalTextAlignment="Center"
+                       IsVisible="{Binding IsEngineer}" />
+
+                <Label Text="Current Tickets"
+                       FontFamily="LexendLight"
+                       FontSize="21"
+                       TextColor="{StaticResource PrimaryLight}"
+                       VerticalTextAlignment="Center"
+                       IsVisible="{Binding IsNotEngineer}" />
+
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"
+                                   IsVisible="{Binding IsEngineer}"
+                                   Spacing="5">
+                <Button Text="High Priority"
+                        FontSize="18"
+                        FontFamily="LexendBold"
+                        TextColor="White"
+                        BackgroundColor="Red"
+                        Padding="10"
+                        Command="{Binding FilterUnAssignedByPriorityCommand}"
+                        CommandParameter="{x:Static viewModel:PriorityFilterType.High}" />
+                <Button Text="Medium Priority"
+                        FontSize="18"
+                        FontFamily="LexendBold"
+                        TextColor="White"
+                        BackgroundColor="DarkOrange"
+                        Padding="10"
+                        Command="{Binding FilterUnAssignedByPriorityCommand}"
+                        CommandParameter="{x:Static viewModel:PriorityFilterType.Medium}" />
+                <Button Text="Low Priority"
+                        FontSize="18"
+                        FontFamily="LexendBold"
+                        TextColor="White"
+                        BackgroundColor="Green"
+                        Padding="10"
+                        Command="{Binding FilterUnAssignedByPriorityCommand}"
+                        CommandParameter="{x:Static viewModel:PriorityFilterType.Low}" />
+
+                <Button Text="Clear"
+                        FontSize="18"
+                        FontFamily="LexendBold"
+                        TextColor="White"
+                        BackgroundColor="Grey"
+                        Padding="10"
+                        Command="{Binding FilterUnAssignedByPriorityCommand}"
+                        CommandParameter="{x:Static viewModel:PriorityFilterType.None}" />
+            </HorizontalStackLayout>
+        </Grid>
 
         <RefreshView
             Grid.Row="5"
