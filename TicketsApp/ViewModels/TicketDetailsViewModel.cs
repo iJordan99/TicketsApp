@@ -84,6 +84,8 @@ public partial class TicketDetailsViewModel : BaseViewModel, IQueryAttributable
         try
         {
             var includes = "comment,author,engineer";
+            var test = await _ticketService.GetTicketWithIncludes(Ticket, includes);
+            var responseBody = await test.Content.ReadAsStringAsync();
             if (Ticket != null)
                 TicketData =
                     await _ticketParser.ParseTicketWithIncludes(

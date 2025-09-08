@@ -5,43 +5,42 @@ public class TicketParsingConfig(
     string attributesProperty = "attributes",
     string includesProperty = "includes")
 {
-
     private readonly Dictionary<string, string> _commentFieldMappings = new()
     {
-        { "CommentId", "id" },
-        { "TicketId", "ticket" },
-        { "CommentText", "comment" },
-        { "CreatedAt", "created_at" }
+        { "id", "id" },
+        { "ticket", "ticket" },
+        { "comment", "comment" },
+        { "Created_at", "created_at" }
     };
 
     private readonly Dictionary<string, string> _fieldMappings = new()
     {
-        { "Id", "id" },
-        { "ErrorCode", "error_code" },
-        { "Title", "title" },
-        { "Description", "description" },
-        { "Status", "status" },
-        { "Type", "type" },
-        { "Priority", "priority" },
-        { "ReproductionStep", "reproduction_step" },
-        { "CreatedOn", "created_at" },
-        { "UpdatedOn", "updated_at" }
+        { "id", "id" },
+        { "error_code", "error_code" },
+        { "title", "title" },
+        { "description", "description" },
+        { "status", "status" },
+        { "type", "type" },
+        { "priority", "priority" },
+        { "reproduction_step", "reproduction_step" },
+        { "created_at", "created_at" },
+        { "updated_at", "updated_at" }
     };
 
     private readonly Dictionary<string, string> _includesMappings = new()
     {
-        { "Author", "author" },
-        { "Engineer", "engineer" },
-        { "Comments", "comments" }
+        { "author", "author" },
+        { "engineers", "engineers" },
+        { "comments", "comments" }
     };
 
     private readonly Dictionary<string, string> _userFieldMappings = new()
     {
-        { "UserId", "id" },
-        { "Name", "name" },
-        { "Email", "email" },
-        { "IsEngineer", "is_engineer" },
-        { "AssignedAt", "assigned_at" }
+        { "id", "id" },
+        { "name", "name" },
+        { "email", "email" },
+        { "is_engineer", "is_engineer" },
+        { "assigned_at", "assigned_at" }
     };
 
     public string RootProperty { get; } = rootProperty;
