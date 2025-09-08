@@ -14,41 +14,46 @@
         Route="Login"
         FlyoutItemIsVisible="False" />
 
-
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
-            <Grid HeightRequest="100">
+            <VerticalStackLayout Padding="0,40,0,30">
+
+                <Image Source="logo.png"
+                       HeightRequest="45"
+                       WidthRequest="45"
+                       Aspect="AspectFit" />
+
                 <Label Text="Ticketly"
                        FontSize="30"
-                       Margin="0,40,0,0"
+                       Margin="0,40,0,20"
                        TextColor="White"
                        FontFamily="LexendBold"
                        VerticalTextAlignment="Start"
                        HorizontalOptions="Center" />
-            </Grid>
+
+
+            </VerticalStackLayout>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
 
     <Shell.ItemTemplate>
         <DataTemplate>
-            <Grid Padding="10" HorizontalOptions="Center" VerticalOptions="Center">
-                <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
-                    <Image Source="{Binding Icon}"
-                           WidthRequest="40"
-                           HeightRequest="40"
-                           Aspect="AspectFit" />
+            <HorizontalStackLayout Spacing="10" Margin="35,0,0,0">
+                <Image Source="{Binding Icon}"
+                       WidthRequest="25"
+                       HeightRequest="25"
+                       Aspect="AspectFit" />
 
-                    <Label Text="{Binding Title}"
-                           FontSize="16"
-                           TextColor="White"
-                           FontFamily="LexendRegular"
-                           HorizontalOptions="Center" />
-                </StackLayout>
-            </Grid>
+                <Label Text="{Binding Title}"
+                       FontSize="21"
+                       TextColor="White"
+                       FontFamily="LexendRegular"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
         </DataTemplate>
     </Shell.ItemTemplate>
 
-    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="dash_icon.png" Title="Dashboard">
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="home.png" Title="Home">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:HomePage}" Route="HomePage" />
         </Tab>
@@ -56,13 +61,13 @@
 
     <MenuFlyoutSeparator />
 
-    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="dash_icon.png" Title="Test">
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="search.png" Title="Search">
         <Tab>
-            <!-- <ShellContent ContentTemplate="{DataTemplate local:HomePage}" Route="HomePage"/> -->
+            <ShellContent ContentTemplate="{DataTemplate local:SearchPage}" Route="SearchPage" />
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="settings_icon.png">
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" Icon="settings.png" Title="Settings">
         <Tab>
             <!-- <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Route="SettingsPage"/> -->
         </Tab>

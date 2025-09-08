@@ -124,8 +124,7 @@
                                         BackgroundColor="White">
                                     <Border.GestureRecognizers>
                                         <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:HomePageViewModel}},
-                                                Path= TicketDetailsCommand}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.TicketDetailsCommand}"
                                             CommandParameter="{Binding}" />
                                     </Border.GestureRecognizers>
                                     <VerticalStackLayout>
@@ -174,9 +173,9 @@
                                         BackgroundColor="White">
                                     <Border.GestureRecognizers>
                                         <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:HomePageViewModel}},
-                                                Path= TicketDetailsCommand}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.TicketDetailsCommand}"
                                             CommandParameter="{Binding}" />
+
                                     </Border.GestureRecognizers>
                                     <VerticalStackLayout>
                                         <Label Text="{Binding Title}"
@@ -391,8 +390,7 @@
                                         BackgroundColor="White">
                                     <Border.GestureRecognizers>
                                         <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:HomePageViewModel}},
-                                                Path= TicketDetailsCommand}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.TicketDetailsCommand}"
                                             CommandParameter="{Binding}" />
                                     </Border.GestureRecognizers>
                                     <VerticalStackLayout>

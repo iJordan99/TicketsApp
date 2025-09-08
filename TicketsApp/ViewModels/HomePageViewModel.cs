@@ -27,8 +27,8 @@ public partial class HomePageViewModel : BaseViewModel
 {
     private const int FirstPage = 1;
 
-    private readonly IEngineerTicketService _engineerTicketService;
     private readonly IMetaParser _metaParser;
+    private readonly ITicketNavigationService _ticketNavigationService;
     private readonly ITicketParser _ticketParser;
     private readonly ITicketService _ticketService;
 
@@ -54,13 +54,14 @@ public partial class HomePageViewModel : BaseViewModel
     [ObservableProperty] private int _userTicketTotalPages;
 
     public HomePageViewModel(IAppState appState, IEngineerTicketService engineerTicketService,
-        ITicketService ticketService, ITicketParser ticketParser, IMetaParser metaParser)
+        ITicketService ticketService, ITicketParser ticketParser, IMetaParser metaParser,
+        ITicketNavigationService ticketNavigationService)
         : base(appState)
     {
-        _engineerTicketService = engineerTicketService;
         _ticketService = ticketService;
         _ticketParser = ticketParser;
         _metaParser = metaParser;
+        _ticketNavigationService = ticketNavigationService;
 
         AssignedCurrentPage = FirstPage;
         UnassignedCurrentPage = FirstPage;
@@ -116,15 +117,7 @@ public partial class HomePageViewModel : BaseViewModel
     [RelayCommand]
     private async Task TicketDetails(Ticket ticket)
     {
-        if (ticket == null) return;
-
-        var navigationParameters = new Dictionary<string, object>
-        {
-            { "ticket", ticket },
-            { "isEngineer", IsEngineer ?? false }
-        };
-
-        await Shell.Current.GoToAsync(nameof(TicketDetailsPage), true, navigationParameters);
+        await _ticketNavigationService.ShowTicketDetailsAsync(ticket, IsEngineer ?? false);
     }
 
     [RelayCommand]

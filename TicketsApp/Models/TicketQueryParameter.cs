@@ -13,4 +13,6 @@ public class TicketQueryParameter
     public int? Engineer { get; init; }
 
     public int? Author { get; init; }
+
+    public string? Title { get; init; }
 }

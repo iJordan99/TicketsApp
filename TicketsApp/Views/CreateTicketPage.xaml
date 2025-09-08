@@ -237,7 +237,9 @@
                        BackgroundColor="White"
                        PlaceholderColor="Black"
                        TextColor="Black"
+                       CancelButtonColor="{StaticResource Primary}"
                        FontSize="21"
+                       FontFamily="LexendRegular"
                        Text="{Binding SearchTerm, Mode=TwoWay}"
                        SearchCommand="{Binding SearchAuthorsCommand}"
                        IsVisible="{Binding IsEngineer}" />

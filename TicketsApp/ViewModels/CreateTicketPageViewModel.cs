@@ -11,7 +11,6 @@ public partial class CreateTicketPageViewModel : BaseViewModel
 {
     private readonly IAuthorService _authorService;
     private readonly IEngineerService _engineerService;
-    private readonly IPostApiResponseService _postApiResponseService;
     private readonly ITicketService _ticketService;
     private readonly IUserParser _userParser;
     [ObservableProperty] private string _description;
@@ -49,7 +48,6 @@ public partial class CreateTicketPageViewModel : BaseViewModel
         IUserParser userParser) : base(appState)
     {
         _ticketService = ticketService;
-        _postApiResponseService = postApiResponseService;
         _authorService = authorService;
         _engineerService = engineerService;
         _userParser = userParser;

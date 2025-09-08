@@ -1,0 +1,69 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TicketsApp.Views.SearchPage"
+             xmlns:viewModel="clr-namespace:TicketsApp.ViewModels"
+             xmlns:model="clr-namespace:TicketsApp.Models"
+             x:DataType="viewModel:SearchPageViewModel"
+             BackgroundColor="#CFD9E4"
+             Shell.BackgroundColor="#CFD9E4">
+
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                             Spacing="10">
+
+            <SearchBar Placeholder="Search Tickets"
+                       BackgroundColor="White"
+                       PlaceholderColor="Black"
+                       FontFamily="LexendRegular"
+                       TextColor="Black"
+                       CancelButtonColor="{StaticResource Primary}"
+                       FontSize="21"
+                       SearchCommand="{Binding SearchTicketsCommand}" />
+
+
+            <VerticalStackLayout Spacing="10">
+                <CollectionView ItemsSource="{Binding Tickets}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical"
+                                         Span="5"
+                                         HorizontalItemSpacing="15"
+                                         VerticalItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type model:Ticket}">
+                            <Border HorizontalOptions="FillAndExpand"
+                                    Padding="10"
+                                    HeightRequest="170"
+                                    BackgroundColor="White">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.TicketDetailsCommand}"
+                                        CommandParameter="{Binding }" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding ., Converter={StaticResource TicketFormatConverter}}"
+                                           TextColor="{Binding Priority, Converter={StaticResource PriorityToColorConverter}}"
+                                           VerticalTextAlignment="Center"
+                                           FontSize="21"
+                                           FontFamily="LexendBold" />
+                                    <Label Text="{Binding Description}"
+                                           VerticalTextAlignment="Center"
+                                           Margin="0,10,0,0"
+                                           TextColor="#1A2D42"
+                                           FontSize="21"
+                                           FontFamily="LexendLight"
+                                           MaxLines="3"
+                                           LineBreakMode="TailTruncation" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

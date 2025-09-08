@@ -50,11 +50,13 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddTransient<LoginPage>();
         mauiAppBuilder.Services.AddTransient<TicketDetailsPage>();
         mauiAppBuilder.Services.AddTransient<CreateTicketPage>();
+        mauiAppBuilder.Services.AddTransient<SearchPage>();
         //ViewModel
         mauiAppBuilder.Services.AddTransient<HomePageViewModel>();
         mauiAppBuilder.Services.AddTransient<LoginPageViewModel>();
         mauiAppBuilder.Services.AddTransient<TicketDetailsViewModel>();
         mauiAppBuilder.Services.AddTransient<CreateTicketPageViewModel>();
+        mauiAppBuilder.Services.AddTransient<SearchPageViewModel>();
         return mauiAppBuilder;
     }
 
@@ -67,6 +69,8 @@ public static class MauiProgram
 
         mauiAppBuilder.Services.AddSingleton<IEngineerTicketService, EngineerTicketService>();
         mauiAppBuilder.Services.AddSingleton<IEngineerService, EngineerService>();
+        mauiAppBuilder.Services.AddSingleton<ITicketNavigationService, TicketNavigationService>();
+
 
         mauiAppBuilder.Services.AddSingleton(new JsonSerializerOptions
         {
